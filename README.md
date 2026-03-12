@@ -1,0 +1,3 @@
+Interactive Visualization of Computer Science Specializations Using a Curriculum Knowledge Graph
+
+This repository contains the source code for the Curriculum Knowledge Graph Visualization (CKGV) system. The project automates the extraction of academic entities—such as courses, prerequisites, and technical skills—from unstructured PDF handbooks using a custom Natural Language Processing pipeline (Regex + BERT). The extracted data is persisted in a hybrid PostgreSQL database and rendered dynamically on the client side using a D3.js force-directed graph, allowing users to interactively explore academic dependencies.
