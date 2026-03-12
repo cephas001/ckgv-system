@@ -96,6 +96,6 @@ if __name__ == "__main__":
         with open(output_path, "w") as f:
             json.dump(courses, f, indent=4)
             
-        print(f"✅ SYSTEM SUCCESS: Extracted {len(courses)} courses and saved to {output_path}!")
+        print(f"SYSTEM SUCCESS: Extracted {len(courses)} courses and saved to {output_path}!")
     except FileNotFoundError:
-        print(f"❌ ERROR: Could not find the PDF. Make sure it is saved exactly at: {PDF_PATH}")
+        print(f"ERROR: Could not find the PDF. Make sure it is saved exactly at: {PDF_PATH}")
