@@ -33,7 +33,7 @@
         <h2 class="text-2xl font-bold text-white mb-1">
           {{ selectedData.title }}
         </h2>
-        <p class="text-slate-400 font-mono text-sm mb-6">
+        <p class="text-slate-400 text-sm mb-6">
           {{ selectedData.course_id }} • {{ selectedData.credits }} Units
         </p>
 
