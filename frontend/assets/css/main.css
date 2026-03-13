@@ -1,0 +1,7 @@
+@import "@fontsource/poppins";
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8fafc;
+    /* Tailwind slate-50 */
+}

@@ -1,15 +1,22 @@
 # Python / Backend
+
 backend/venv/
-__pycache__/
-*.pyc
+**pycache**/
+\*.pyc
 .env
 
 # Node.js / Nuxt 3 Frontend
+
 frontend/node_modules/
 frontend/.nuxt/
 frontend/dist/
 frontend/.output/
 
 # OS Generated Files
+
 .DS_Store
 Thumbs.db
+
+# General Files
+
+.cursorrules

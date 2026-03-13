@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full relative overflow-hidden flex flex-col bg-slate-900"
+    class="w-full h-full relative overflow-hidden flex flex-col bg-[#160d27]"
   >
     <div
       class="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 z-30 w-[90%] md:w-[450px] flex gap-3"
