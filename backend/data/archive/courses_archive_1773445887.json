@@ -1,0 +1,335 @@
+[
+    {
+        "course_id": "CMP 101",
+        "title": "Introduction to Computing",
+        "prerequisites": [],
+        "credits": 3,
+        "synopsis": "This foundational course introduces students to the fundamental concepts of information technology and computer systems. Students will gain hands-on experience with Hardware Architecture, Binary Arithmetic, Operating Systems, and basic Word Processing. The curriculum explores the historical evolution of computing devices and their modern-day applications in various industries. Students are expected to attend all weekly laboratory sessions and submit a final written report.",
+        "technical_skills": [],
+        "specialization": "Core Computer Science"
+    },
+    {
+        "course_id": "CMP 102",
+        "title": "Introduction to Problem Solving and Programming",
+        "prerequisites": [
+            "CMP 101"
+        ],
+        "credits": 3,
+        "synopsis": "This course equips students with the logical reasoning required to translate complex problems into computational solutions. The technical curriculum focuses heavily on designing Flowcharts, writing Pseudocode, implementing logic in Python, and performing Syntax Debugging. Students will learn how to structure algorithms efficiently before writing actual code. Continuous assessment tests will be administered periodically, and a minimum attendance of 75% is strictly required to sit for the final examination.",
+        "technical_skills": [],
+        "specialization": "Core Computer Science"
+    },
+    {
+        "course_id": "CMP 201",
+        "title": "Object-Oriented Programming I",
+        "prerequisites": [
+            "CMP 102"
+        ],
+        "credits": 3,
+        "synopsis": "This module transitions students from procedural programming to modern software design paradigms. Core technical competencies developed in this class include Object-Oriented Programming, Java, Encapsulation, and Polymorphism. Students will build modular, reusable software components and understand class hierarchies. All practical assignments must be submitted via the university's learning management system before the stipulated deadlines. Late submissions will attract a severe penalty.",
+        "technical_skills": [
+            "Java"
+        ],
+        "specialization": "Software Engineering"
+    },
+    {
+        "course_id": "CMP 202",
+        "title": "Object-Oriented Programming II",
+        "prerequisites": [
+            "CMP 201"
+        ],
+        "credits": 3,
+        "synopsis": "Building upon foundational OOP concepts, this advanced course dives into complex software architecture and memory management. Students will master C++, Multithreading, Exception Handling, and the development of Graphical User Interfaces (GUI). The course emphasizes writing robust, high-performance applications for desktop environments. Students must participate actively in group discussions and maintain a comprehensive laboratory workbook throughout the semester.",
+        "technical_skills": [
+            "memory management",
+            "C++"
+        ],
+        "specialization": "Software Engineering"
+    },
+    {
+        "course_id": "CMP 211",
+        "title": "Web Application Development",
+        "prerequisites": [
+            "CMP 102"
+        ],
+        "credits": 3,
+        "synopsis": "This course provides a comprehensive introduction to building interactive and responsive applications for the internet. The technical instruction covers HTML5, CSS3, JavaScript, and the integration of RESTful APIs. Students will learn client-side scripting and the fundamentals of web server communication. Attendance at all scheduled tutorial classes is mandatory, and students are required to present a final project to the departmental panel.",
+        "technical_skills": [
+            "HTML5",
+            "CSS3",
+            "JavaScript",
+            "RESTful APIs"
+        ],
+        "specialization": "Software Engineering"
+    },
+    {
+        "course_id": "CMP 212",
+        "title": "Discrete Structures",
+        "prerequisites": [
+            "CMP 101"
+        ],
+        "credits": 3,
+        "synopsis": "This theoretical course establishes the mathematical foundations necessary for advanced computer science topics. The syllabus rigorously covers Boolean Algebra, Set Theory, Graph Theory, and Combinatorics. These mathematical constructs are essential for understanding algorithm analysis, cryptography, and network topology. Weekly problem sets will be distributed by the course lecturer, and students must ensure all assignments are neatly handwritten and submitted to the class representative.",
+        "technical_skills": [
+            "cryptography"
+        ],
+        "specialization": "Cybersecurity"
+    },
+    {
+        "course_id": "CMP 214",
+        "title": "Systems Analysis and Design",
+        "prerequisites": [
+            "CMP 101"
+        ],
+        "credits": 3,
+        "synopsis": "This course introduces the methodologies used to design, implement, and maintain complex information systems. Students will acquire practical skills in utilizing the Unified Modeling Language (UML), applying Agile Methodology, drafting Entity-Relationship Diagrams, and conducting Feasibility Studies. The focus is on bridging the gap between business requirements and software solutions. A mid-semester examination will form a core component of the continuous assessment, and students are expected to adhere strictly to the university dress code during presentations.",
+        "technical_skills": [
+            "UML",
+            "Agile Methodology"
+        ],
+        "specialization": "Software Engineering"
+    },
+    {
+        "course_id": "CMP 301",
+        "title": "Data Structures and Algorithms",
+        "prerequisites": [
+            "CMP 202"
+        ],
+        "credits": 3,
+        "synopsis": "This critical course focuses on the efficient organization of data and the optimization of computational processes. Students will implement Linked Lists, construct Binary Search Trees, analyze time complexity using Big-O Notation, and solve complex problems using Dynamic Programming. Mastery of these topics is crucial for writing scalable, enterprise-level software. Students are expected to attend all weekly laboratory sessions and submit a final written report detailing their algorithmic implementations.",
+        "technical_skills": [
+            "Linked Lists",
+            "Binary Search Trees",
+            "Dynamic Programming"
+        ],
+        "specialization": "Data & Algorithms"
+    },
+    {
+        "course_id": "CMP 303",
+        "title": "Operating Systems",
+        "prerequisites": [
+            "CMP 201"
+        ],
+        "credits": 3,
+        "synopsis": "This module explores the core software that manages computer hardware and provides common services for computer programs. Technical topics include Process Scheduling, Memory Management, Bash Scripting, and the implementation of POSIX Threads. Students will understand concurrency, deadlocks, and file system architectures. The course instructor reserves the right to conduct unannounced quizzes, and all students must procure the recommended textbook for reference.",
+        "technical_skills": [
+            "Process Scheduling",
+            "Memory Management",
+            "Bash Scripting",
+            "POSIX Threads"
+        ],
+        "specialization": "Systems & Architecture"
+    },
+    {
+        "course_id": "CMP 305",
+        "title": "Data Communications and Networks",
+        "prerequisites": [
+            "CMP 101"
+        ],
+        "credits": 3,
+        "synopsis": "This course provides an in-depth look at how data is transmitted across local and wide area networks. Students will gain hands-on expertise in configuring TCP/IP, calculating Subnetting, implementing Routing Protocols, and analyzing Packet Switching mechanisms. The curriculum covers the OSI model and modern networking hardware. Practical sessions will be held in the Cisco networking laboratory, and students must sign the attendance register upon entry and exit.",
+        "technical_skills": [],
+        "specialization": "Core Computer Science"
+    },
+    {
+        "course_id": "CMP 307",
+        "title": "Database Design and Management",
+        "prerequisites": [
+            "CMP 214"
+        ],
+        "credits": 3,
+        "synopsis": "This course teaches the principles of storing, retrieving, and managing large datasets securely and efficiently. Students will develop strong technical proficiencies in SQL, configuring Relational Database Management Systems (RDBMS), applying data Normalization, and utilizing NoSQL databases. The course emphasizes data integrity, transaction management, and query optimization. A comprehensive term paper is required at the end of the semester, and students must ensure their work is free from any form of plagiarism.",
+        "technical_skills": [
+            "SQL",
+            "Relational Database",
+            "RDBMS",
+            "Normalization",
+            "NoSQL"
+        ],
+        "specialization": "Data & Algorithms"
+    },
+    {
+        "course_id": "CMP 309",
+        "title": "Artificial Intelligence",
+        "prerequisites": [
+            "CMP 301"
+        ],
+        "credits": 3,
+        "synopsis": "This advanced module introduces the concepts and techniques used to create intelligent computational agents. The curriculum covers foundational and modern AI techniques, including Machine Learning, Neural Networks, Natural Language Processing, and Heuristic Search algorithms. Students will build predictive models and explore the ethical implications of autonomous systems. Students must form groups of four for the continuous assessment project and submit a bound copy of their findings to the departmental secretary.",
+        "technical_skills": [
+            "Machine Learning",
+            "Neural Networks",
+            "Natural Language Processing",
+            "Heuristic Search",
+            "predictive models"
+        ],
+        "specialization": "Artificial Intelligence"
+    },
+    {
+        "course_id": "CMP 311",
+        "title": "Formal Methods and Automata Theory",
+        "prerequisites": [
+            "CMP 212"
+        ],
+        "credits": 3,
+        "synopsis": "This theoretical computer science course explores the mathematical models of computation and their limitations. Students will rigorously study Finite State Machines, construct Regular Expressions, design Context-Free Grammars, and analyze Turing Machines. These concepts form the bedrock for understanding computability and the design of programming languages. Regular attendance is a prerequisite for passing this course, and students are expected to participate actively in all theoretical tutorial sessions.",
+        "technical_skills": [],
+        "specialization": "Core Computer Science"
+    },
+    {
+        "course_id": "CMP 316",
+        "title": "Compiler Construction I",
+        "prerequisites": [
+            "CMP 311"
+        ],
+        "credits": 3,
+        "synopsis": "This course demystifies the process of translating high-level programming languages into machine-executable code. The technical syllabus focuses on the front-end phases of compilation, specifically Lexical Analysis, Syntax Parsing, generating Abstract Syntax Trees, and managing Symbol Tables. Students will build a basic scanner and parser for a custom programming language. Students are required to submit a weekly progress report to their assigned laboratory instructors and maintain a clean working environment in the computer room.",
+        "technical_skills": [],
+        "specialization": "Data & Algorithms"
+    },
+    {
+        "course_id": "CMP 401",
+        "title": "Advanced Compilers",
+        "prerequisites": [
+            "CMP 214"
+        ],
+        "credits": 3,
+        "synopsis": "This capstone-level course prepares students for the realities of commercial software development and project management. Students will master the Scrum Framework, utilize Version Control (Git), implement Continuous Integration/Continuous Deployment (CI/CD) pipelines, and execute automated Software Testing. The course simulates a real-world software development lifecycle from requirements gathering to deployment. The final grade will be heavily weighted on the group project presentation, and students must dress in formal corporate attire during the defense.",
+        "technical_skills": [],
+        "specialization": "Core Computer Science"
+    },
+    {
+        "course_id": "CMP 403",
+        "title": "Human-Computer Interaction",
+        "prerequisites": [
+            "CMP 211"
+        ],
+        "credits": 2,
+        "synopsis": "This course examines the design, evaluation, and implementation of interactive computing systems for human use. Students will develop highly sought-after skills in User Experience (UX) Design, Wireframing, conducting Usability Testing, and rapid Prototyping. The curriculum emphasizes cognitive psychology principles and accessibility standards in software interfaces. All students must complete the mandatory course evaluation form before the final examination docket can be issued by the faculty officer.",
+        "technical_skills": [
+            "User Experience"
+        ],
+        "specialization": "Software Engineering"
+    },
+    {
+        "course_id": "CMP 405",
+        "title": "Net-Centric Computing",
+        "prerequisites": [
+            "CMP 305"
+        ],
+        "credits": 3,
+        "synopsis": "This course explores the architecture and development of applications that rely heavily on network communications and distributed resources. Technical instruction covers Cloud Computing, the architecture of Distributed Systems, low-level Socket Programming, and designing Microservices Architecture. Students will learn how to build scalable, fault-tolerant applications deployed across multiple servers. Attendance at the departmental seminar series is compulsory for all final-year students, and a summary report must be attached to the final assignment.",
+        "technical_skills": [],
+        "specialization": "Core Computer Science"
+    },
+    {
+        "course_id": "CMP 407",
+        "title": "Computer Architecture II",
+        "prerequisites": [
+            "CMP 303"
+        ],
+        "credits": 3,
+        "synopsis": "This advanced hardware course delves into the internal workings of modern microprocessors and high-performance computing systems. Students will analyze Instruction Set Architecture (ISA), implement CPU Pipelining, manage Cache Coherence, and explore Parallel Processing paradigms. The course bridges the gap between low-level hardware design and operating system resource management. Students are expected to attend all weekly laboratory sessions and submit a final written report detailing their hardware simulation results.",
+        "technical_skills": [
+            "Instruction Set Architecture",
+            "ISA",
+            "CPU Pipelining",
+            "Cache Coherence",
+            "Parallel Processing"
+        ],
+        "specialization": "Systems & Architecture"
+    },
+    {
+        "course_id": "CMP 409",
+        "title": "Cryptography and Network Security",
+        "prerequisites": [
+            "CMP 305"
+        ],
+        "credits": 3,
+        "synopsis": "This critical security course trains students to protect digital assets and secure communication channels against malicious attacks. The curriculum provides deep technical training in Public Key Infrastructure (PKI), the Advanced Encryption Standard (AES), cryptographic Hash Functions, and ethical Penetration Testing. Students will learn to identify vulnerabilities and implement robust defensive countermeasures. Late entry into the lecture hall will not be tolerated, and students must ensure their mobile devices are switched off during all academic interactions.",
+        "technical_skills": [
+            "Public Key Infrastructure",
+            "PKI",
+            "Advanced Encryption Standard",
+            "AES",
+            "Hash Functions",
+            "Penetration Testing"
+        ],
+        "specialization": "Cybersecurity"
+    },
+    {
+        "course_id": "CMP 417",
+        "title": "Compiler Construction II",
+        "prerequisites": [
+            "CMP 316"
+        ],
+        "credits": 3,
+        "synopsis": "This final-year course completes the study of language translation by focusing on the back-end phases of a compiler. Students will develop advanced technical skills in Code Optimization, Register Allocation, Intermediate Code Generation, and emitting Target Machine Code. The project involves completing the compiler started in the prerequisite course, resulting in a fully functional language translator. A comprehensive laboratory manual must be purchased from the university bookshop, and students are required to complete all exercises within the stipulated academic calendar.",
+        "technical_skills": [
+            "Code Optimization",
+            "Register Allocation",
+            "Intermediate Code Generation",
+            "Target Machine Code"
+        ],
+        "specialization": "Systems & Architecture"
+    },
+    {
+        "course_id": "CMP 318",
+        "title": "Test Course 1",
+        "specialization": "Software Engineering",
+        "prerequisites": [],
+        "technical_skills": [
+            "Agile",
+            "UML",
+            "SDLC",
+            "Scrum",
+            "Git"
+        ]
+    },
+    {
+        "course_id": "CMP 317",
+        "title": "Test Course 2",
+        "specialization": "Core Computer Science",
+        "prerequisites": [],
+        "technical_skills": [
+            "Process Scheduling",
+            "Memory Management"
+        ]
+    },
+    {
+        "course_id": "CMP 498",
+        "title": "Test Course 3",
+        "specialization": "Software Engineering",
+        "prerequisites": [
+            "CMP 201",
+            "CMP 405"
+        ],
+        "technical_skills": [
+            "Git",
+            "Scrum Framework",
+            "Version Control",
+            "Continuous Integration",
+            "Software Testing"
+        ]
+    },
+    {
+        "course_id": "CMP 397",
+        "title": "Managing Memories",
+        "specialization": "Software Engineering",
+        "prerequisites": [
+            "CMP 201"
+        ],
+        "technical_skills": [
+            "Memory Management",
+            "C++"
+        ],
+        "synopsis": "Building upon foundational OOP concepts, this advanced course dives into complex software architecture and memory management. Students will master C++, Multithreading, Exception Handling, and the development of Graphical User Interfaces (GUI). The course emphasizes writing robust, high-performance applications for desktop environments. Students must participate actively in group discussions and maintain a comprehensive laboratory workbook throughout the semester.",
+        "credits": 3
+    },
+    {
+        "course_id": "CMP 402",
+        "title": "Cloud Computing",
+        "specialization": "Core Computer Science",
+        "technical_skills": []
+    }
+]

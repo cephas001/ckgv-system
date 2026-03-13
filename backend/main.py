@@ -10,12 +10,14 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import get_db
-from models import AdminUser
+from models import AdminUser, AuditLog
 from pydantic import BaseModel
 import shutil
 import csv
 import json
 import os 
+import io
+import time
 
 DATA_PATH = os.path.join("data", "courses.json")
 
@@ -46,6 +48,11 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
+
+# --- NEW: WRITE TO AUDIT LOG ---
+    new_log = AuditLog(AdminID=user.AdminID, ActionType="ADMIN_LOGIN")
+    db.add(new_log)
+    await db.commit()
 
     # 3. Generate a secure JWT Token
     expiration = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -114,68 +121,141 @@ async def analyze_course_description(payload: dict):
     print(results)
     return results
 
-@app.post("/api/courses/bulk")
-async def bulk_import_courses(file: UploadFile = File(...)):
-    # Check if it's a CSV
+# 1. Define the expected data structure from the frontend
+class CourseUpdate(BaseModel):
+    title: str
+    specialization: str
+    technical_skills: List[str]
+
+# 2. The Update Endpoint
+@app.put("/api/courses/{course_id}")
+async def update_course(course_id: str, update_data: CourseUpdate):
+    # Path to your JSON data (adjust if your folder structure is slightly different)
+    file_path = "data/courses.json" 
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Curriculum data not found.")
+
+    # Read the current graph data
+    with open(file_path, "r") as f:
+        courses = json.load(f)
+
+    # Find the course and apply the updates
+    course_found = False
+    for course in courses:
+        if course.get("course_id") == course_id:
+            course["title"] = update_data.title
+            course["specialization"] = update_data.specialization
+            course["technical_skills"] = update_data.technical_skills
+            course_found = True
+            break
+
+    if not course_found:
+        raise HTTPException(status_code=404, detail="Course not found in database.")
+
+    # Save the updated data back to the JSON file
+    with open(file_path, "w") as f:
+        json.dump(courses, f, indent=4)
+
+    return {"message": f"Successfully updated {course_id}"}
+
+# --- PYDANTIC MODELS FOR VALIDATION ---
+class ValidatedCourse(BaseModel):
+    course_id: str
+    title: str
+    specialization: Optional[str] = "Core Computer Science"
+    technical_skills: List[str]
+    # Add any other fields your JSON graph uses (credits, prerequisites, etc.)
+
+class CommitRequest(BaseModel):
+    courses: List[ValidatedCourse]
+    import_mode: str = "update" # Defaults to update, can be "overwrite"
+
+# --- STEP 1: THE AI PREVIEW ENDPOINT ---
+@app.post("/api/upload/preview")
+async def preview_curriculum_data(file: UploadFile = File(...)):
     if not file.filename.endswith('.csv'):
-        raise HTTPException(status_code=400, detail="Only CSV files are supported for bulk import.")
-
-    # --- STEP 1: ARCHIVE CURRENT DATA ---
-    db_path = 'data/courses.json'
-    archive_dir = 'data/archive'
+        raise HTTPException(status_code=400, detail="Only CSV files are supported.")
     
-    # Create archive folder if it doesn't exist
-    os.makedirs(archive_dir, exist_ok=True)
-    
-    # If we have existing data, back it up with a timestamp
-    if os.path.exists(db_path):
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        archive_path = os.path.join(archive_dir, f"courses_backup_{timestamp}.json")
-        shutil.copy2(db_path, archive_path)
-
-    # --- STEP 2: READ THE UPLOADED CSV ---
     content = await file.read()
-    # Decode the bytes to a string
     decoded_content = content.decode('utf-8')
     csv_reader = csv.DictReader(StringIO(decoded_content))
     
-    new_courses = []
+    extracted_courses = []
     
-    # --- STEP 3: RUN THE NLP PIPELINE ---
     for row in csv_reader:
-        # We expect the CSV to have headers: course_id, title, credits, synopsis
         course_id = row.get('course_id', '').strip()
         title = row.get('title', '').strip()
         credits_str = row.get('credits', '3')
         synopsis = row.get('synopsis', '').strip()
         
         if not course_id or not title:
-            continue # Skip empty rows
+            continue
             
-        # Run the AI on the synopsis!
+        # --- YOUR ACTUAL AI PARSER LOGIC ---
         nlp_results = parser.extract_metadata(synopsis)
         
-        # Format the course object
         course_data = {
             "course_id": course_id,
             "title": title,
             "credits": int(credits_str) if credits_str.isdigit() else 3,
             "specialization": nlp_results["suggested_specialization"],
             "technical_skills": nlp_results["extracted_skills"],
-            "prerequisites": [], # Can be added to CSV later if needed
+            "prerequisites": [],
             "synopsis": synopsis
         }
-        new_courses.append(course_data)
+        extracted_courses.append(course_data)
+        
+    # Return it to the frontend for Admin Validation!
+    return {"extracted_courses": extracted_courses}
 
-    # --- STEP 4: SAVE THE NEW KNOWLEDGE GRAPH ---
-    # (Note: This overwrites the old DB. If you want to merge, you'd load the old DB first and append)
+
+# --- STEP 2: THE SECURE COMMIT ENDPOINT ---
+@app.post("/api/upload/commit")
+async def commit_curriculum_data(request: CommitRequest, db: AsyncSession = Depends(get_db)):
+    file_path = "data/courses.json"
+    archive_dir = "data/archive"
+    
+    # 1. HANDLE ARCHIVING IF OVERWRITING
+    if request.import_mode == "overwrite" and os.path.exists(file_path):
+        os.makedirs(archive_dir, exist_ok=True)
+        timestamp = int(time.time())
+        archive_path = os.path.join(archive_dir, f"courses_archive_{timestamp}.json")
+        shutil.copy(file_path, archive_path)
+    
+    # 2. LOAD EXISTING OR START FRESH
+    existing_courses = []
+    if request.import_mode == "update" and os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            existing_courses = json.load(f)
+
+    # 3. MERGE OR OVERWRITE DATA
+    if request.import_mode == "overwrite":
+        # If overwrite, the new graph is strictly what was just validated
+        existing_courses = [course.dict() for course in request.courses]
+    else:
+        # If update, perform the dictionary merge we built earlier
+        existing_ids = {c.get('course_id'): i for i, c in enumerate(existing_courses)}
+        for new_course in request.courses:
+            course_dict = new_course.dict()
+            if course_dict['course_id'] in existing_ids:
+                idx = existing_ids[course_dict['course_id']]
+                existing_courses[idx].update(course_dict)
+            else:
+                existing_courses.append(course_dict)
+            
+    # 4. SAVE THE GRAPH
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, "w") as f:
+        json.dump(existing_courses, f, indent=4)
+        
+    # 5. AUDIT LOGGING
     try:
-        with open(db_path, 'w') as f:
-            json.dump(new_courses, f, indent=4)
-        return {
-            "status": "success", 
-            "message": f"Successfully processed and imported {len(new_courses)} courses.",
-            "archived_to": f"courses_backup_{timestamp}.json" if os.path.exists(db_path) else "No previous data to archive."
-        }
+        action_type = "BULK_OVERWRITE_GRAPH" if request.import_mode == "overwrite" else "BULK_UPDATE_GRAPH"
+        new_log = AuditLog(AdminID=1, ActionType=action_type)
+        db.add(new_log)
+        await db.commit()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database Write Error: {str(e)}")
+        print(f"Failed to write audit log: {e}")
+
+    return {"message": f"Successfully committed data in '{request.import_mode}' mode!"}

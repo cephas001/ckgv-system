@@ -111,10 +111,18 @@
                 <td class="px-6 py-4 whitespace-nowrap text-right">
                   <button
                     type="button"
-                    class="inline-flex items-center justify-center rounded-xl bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 text-sm shadow-[0_4px_14px_0_rgba(227,62,56,0.25)] transition-all transform hover:-translate-y-0.5"
+                    class="inline-flex items-center justify-center rounded-xl bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 text-sm shadow-[0_4px_14px_0_rgba(227,62,56,0.25)] transition-all"
                     @click="openDetails(course)"
                   >
                     View Details
+                  </button>
+                  <button
+                    v-if="isAdmin"
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-4 py-2 text-sm shadow-sm transition-all ml-2"
+                    @click="openEdit(course)"
+                  >
+                    Edit
                   </button>
                 </td>
               </tr>
@@ -135,6 +143,108 @@
       :selectedData="selectedCourse"
       @close="selectedCourse = null"
     />
+
+    <div
+      v-if="isEditing"
+      class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50"
+        >
+          <h3 class="font-bold text-lg text-black">Edit Node Data</h3>
+          <button
+            @click="isEditing = false"
+            class="text-slate-400 hover:text-slate-700"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div>
+            <label
+              class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
+              >Course Title</label
+            >
+            <input
+              v-model="editForm.title"
+              type="text"
+              class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:ring-1 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
+              >Specialization</label
+            >
+            <select
+              v-model="editForm.specialization"
+              class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:ring-1 focus:ring-indigo-500"
+            >
+              <option>Core Computer Science</option>
+              <option>Software Engineering</option>
+              <option>Cybersecurity</option>
+              <option>Data & Algorithms</option>
+              <option>Systems & Architecture</option>
+              <option>Artificial Intelligence</option>
+            </select>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
+              >Extracted Skills (Comma Separated)</label
+            >
+            <textarea
+              :value="editForm.technical_skills?.join(', ')"
+              class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm h-20 focus:ring-1 focus:ring-indigo-500 resize-none"
+            ></textarea>
+            <p class="text-[10px] text-slate-400 mt-1">
+              Manual override for spaCy NLP extraction.
+            </p>
+          </div>
+        </div>
+        <div
+          class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3 bg-slate-50"
+        >
+          <button
+            @click="isEditing = false"
+            class="px-5 py-2 text-sm font-bold text-black hover:text-slate-700"
+          >
+            Cancel
+          </button>
+          <button
+            @click="saveEdit"
+            :disabled="isSaving"
+            class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white px-5 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2"
+          >
+            <svg
+              v-if="isSaving"
+              class="animate-spin h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            {{ isSaving ? "Saving..." : "Save Changes" }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -143,6 +253,83 @@ import { computed, ref } from "vue";
 
 const query = ref("");
 const selectedCourse = ref(null);
+const isSaving = ref(false);
+
+const { triggerNotification } = useNotification();
+
+// --- ADD THIS TO CHECK IF ADMIN IS LOGGED IN ---
+const isAdmin = computed(() => {
+  return !!useCookie("auth_token").value;
+});
+
+const isEditing = ref(false);
+const editForm = ref(null);
+
+// --- ADD THIS TO HANDLE EDIT CLICK ---
+const openEdit = (course) => {
+  // Create a deep copy of the course so we don't accidentally mutate the table before saving
+  editForm.value = JSON.parse(JSON.stringify(course));
+  isEditing.value = true;
+};
+
+const saveEdit = async () => {
+  isSaving.value = true;
+
+  try {
+    // 1. Format the technical skills back into an array
+    let updatedSkills = [];
+    if (typeof editForm.value.technical_skills === "string") {
+      // Splits by comma, removes extra spaces, and filters out empty strings
+      updatedSkills = editForm.value.technical_skills
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter((skill) => skill.length > 0);
+    } else if (Array.isArray(editForm.value.technical_skills)) {
+      updatedSkills = editForm.value.technical_skills;
+    }
+
+    // 2. Send the real update request to FastAPI
+    await $fetch(
+      `http://127.0.0.1:8000/api/courses/${editForm.value.course_id}`,
+      {
+        method: "PUT",
+        body: {
+          title: editForm.value.title,
+          specialization: editForm.value.specialization,
+          technical_skills: updatedSkills,
+        },
+      },
+    );
+
+    // 3. Update the local UI state so the table and graph reflect the change instantly
+    const index = courses.value.findIndex(
+      (c) => c.course_id === editForm.value.course_id,
+    );
+    if (index !== -1) {
+      courses.value[index].title = editForm.value.title;
+      courses.value[index].specialization = editForm.value.specialization;
+      courses.value[index].technical_skills = updatedSkills;
+    }
+
+    // Close modal and clean up
+    isEditing.value = false;
+    editForm.value = null;
+
+    // Optional: You can replace this alert with your beautiful Toast Notification!
+    triggerNotification(
+      `Successfully updated: ${courses.value[index].course_id}`,
+      "success",
+    );
+  } catch (error) {
+    console.error("Update failed:", error);
+    triggerNotification(
+      "Failed to update course. Ensure the backend is running.",
+      "error",
+    );
+  } finally {
+    isSaving.value = false;
+  }
+};
 
 const {
   data: courses,

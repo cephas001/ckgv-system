@@ -144,22 +144,16 @@
     "credits": 3,
     "synopsis": "This course demystifies the process of translating high-level programming languages into machine-executable code. The technical syllabus focuses on the front-end phases of compilation, specifically Lexical Analysis, Syntax Parsing, generating Abstract Syntax Trees, and managing Symbol Tables. Students will build a basic scanner and parser for a custom programming language. Students are required to submit a weekly progress report to their assigned laboratory instructors and maintain a clean working environment in the computer room.",
     "technical_skills": [],
-    "specialization": "Core Computer Science"
+    "specialization": "Data & Algorithms"
   },
   {
     "course_id": "CMP 401",
-    "title": "Software Engineering",
+    "title": "Advanced Compilers",
     "prerequisites": ["CMP 214"],
     "credits": 3,
     "synopsis": "This capstone-level course prepares students for the realities of commercial software development and project management. Students will master the Scrum Framework, utilize Version Control (Git), implement Continuous Integration/Continuous Deployment (CI/CD) pipelines, and execute automated Software Testing. The course simulates a real-world software development lifecycle from requirements gathering to deployment. The final grade will be heavily weighted on the group project presentation, and students must dress in formal corporate attire during the defense.",
-    "technical_skills": [
-      "Scrum Framework",
-      "Version Control",
-      "Git",
-      "Continuous Integration",
-      "Software Testing"
-    ],
-    "specialization": "Software Engineering"
+    "technical_skills": [],
+    "specialization": "Core Computer Science"
   },
   {
     "course_id": "CMP 403",
@@ -259,5 +253,11 @@
     "technical_skills": ["Memory Management", "C++"],
     "synopsis": "Building upon foundational OOP concepts, this advanced course dives into complex software architecture and memory management. Students will master C++, Multithreading, Exception Handling, and the development of Graphical User Interfaces (GUI). The course emphasizes writing robust, high-performance applications for desktop environments. Students must participate actively in group discussions and maintain a comprehensive laboratory workbook throughout the semester.",
     "credits": 3
+  },
+  {
+    "course_id": "CMP 402",
+    "title": "Cloud Computing",
+    "specialization": "Core Computer Science",
+    "technical_skills": []
   }
 ]

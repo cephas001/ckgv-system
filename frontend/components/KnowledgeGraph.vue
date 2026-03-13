@@ -112,6 +112,27 @@
           showSkills ? "Hide Skills" : "Show Skills"
         }}</span>
       </button>
+      <button
+        @click="exportGraph"
+        class="flex items-center gap-2 bg-slate-800/90 border border-slate-600 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-200 shadow-xl backdrop-blur-md hover:bg-slate-700 hover:text-white transition-all shrink-0"
+        title="Save a snapshot of this roadmap"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+          />
+        </svg>
+        <span class="hidden sm:inline">Export</span>
+      </button>
     </div>
 
     <GraphCanvas
@@ -278,5 +299,10 @@ const handleNodeClick = (nodeData) => {
   } else {
     selectedData.value = { type: "skill", id: nodeData.id };
   }
+};
+
+// A simple, browser-native way to export the view for a prototype
+const exportGraph = () => {
+  window.print();
 };
 </script>
