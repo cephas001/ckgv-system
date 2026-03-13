@@ -131,7 +131,7 @@
     </div>
 
     <div
-      class="absolute bottom-6 left-4 md:left-6 z-20 flex flex-col items-start gap-3 pointer-events-auto"
+      class="absolute bottom-6 left-10 z-20 flex flex-col items-start gap-3 pointer-events-auto"
     >
       <transition
         enter-active-class="transition duration-200 ease-out"
@@ -192,7 +192,7 @@
                 class="w-3.5 h-3.5 rounded-full bg-cyan-500 shadow-[0_0_8px_theme(colors.cyan.500)]"
               ></div>
               <span class="text-sm text-slate-200 font-medium"
-                >Systems Arch</span
+                >Systems Architecture</span
               >
             </div>
             <div class="flex items-center gap-3">
@@ -220,20 +220,7 @@
         @click="showLegend = !showLegend"
         class="flex items-center gap-2 bg-slate-800 border border-slate-600 px-4 py-2 rounded-full shadow-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-          />
-        </svg>
+        <IconsMap />
         <span class="text-sm font-semibold">Map Legend</span>
       </button>
     </div>

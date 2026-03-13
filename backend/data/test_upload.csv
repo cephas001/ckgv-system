@@ -1,0 +1,3 @@
+course_id,title,credits,synopsis
+CMP 401,Advanced Compilers,3,Students will learn Code Optimization and Register Allocation.
+CMP 402,Cloud Computing,3,Instruction covers Microservices Architecture and Distributed Systems.

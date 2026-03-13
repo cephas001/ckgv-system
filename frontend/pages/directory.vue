@@ -1,8 +1,7 @@
 <template>
-  <CourseTable />
+  <div class="p-8">
+    <CourseTable />
+  </div>
 </template>
 
-<script setup>
-import CourseTable from "~/components/CourseTable.vue";
-</script>
-
+<script setup></script>

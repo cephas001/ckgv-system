@@ -2,20 +2,11 @@
   <div class="w-full h-full flex flex-col bg-white">
     <div class="px-8 pt-7 pb-5 border-b border-slate-100">
       <div class="flex items-center justify-between gap-4">
-        <div class="min-w-0">
-          <h3 class="text-lg font-bold tracking-tight text-slate-900">
-            Course Directory
-          </h3>
-          <p class="text-sm font-medium text-slate-500 mt-0.5">
-            Search by course code or title.
-          </p>
-        </div>
-
         <div class="w-full max-w-md">
           <label class="sr-only" for="course-search">Search</label>
           <div class="relative">
             <div
-              class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"
+              class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center text-black"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +28,7 @@
               v-model.trim="query"
               type="text"
               placeholder="e.g. CSC 201, Data Structures..."
-              class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm font-semibold text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#160d27]/30 focus:border-[#160d27]/40"
+              class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-black/90 placeholder:text-black/90 focus:outline-none focus:ring-1 focus:ring-black"
             />
           </div>
         </div>
@@ -63,32 +54,32 @@
 
       <div v-else class="px-8 py-6">
         <div
-          class="rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(2,6,23,0.06)] overflow-hidden"
+          class="rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(2,6,23,0.06)] overflow-y-auto"
         >
           <table class="min-w-full divide-y divide-slate-100">
             <thead class="bg-slate-50">
               <tr>
                 <th
                   scope="col"
-                  class="px-6 py-4 text-left text-xs font-bold tracking-widest uppercase text-slate-500"
+                  class="px-6 py-4 text-left text-xs font-bold tracking-widest uppercase text-black"
                 >
                   Code
                 </th>
                 <th
                   scope="col"
-                  class="px-6 py-4 text-left text-xs font-bold tracking-widest uppercase text-slate-500"
+                  class="px-6 py-4 text-left text-xs font-bold tracking-widest uppercase text-black"
                 >
                   Title
                 </th>
                 <th
                   scope="col"
-                  class="px-6 py-4 text-left text-xs font-bold tracking-widest uppercase text-slate-500"
+                  class="px-6 py-4 text-left text-xs font-bold tracking-widest uppercase text-black"
                 >
                   Specialization
                 </th>
                 <th scope="col" class="px-6 py-4 text-right">
                   <span
-                    class="text-xs font-bold tracking-widest uppercase text-slate-500"
+                    class="text-xs font-bold tracking-widest uppercase text-black"
                     >Actions</span
                   >
                 </th>
@@ -102,12 +93,12 @@
                 class="hover:bg-slate-50/70 transition-colors"
               >
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-extrabold text-slate-900">
+                  <div class="text-sm text-black">
                     {{ course.course_id }}
                   </div>
                 </td>
                 <td class="px-6 py-4 min-w-[320px]">
-                  <div class="text-sm font-bold text-slate-900">
+                  <div class="text-sm text-black">
                     {{ course.title || "Untitled Course" }}
                   </div>
                 </td>
@@ -122,7 +113,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-right">
                   <button
                     type="button"
-                    class="inline-flex items-center justify-center rounded-xl bg-[#e33e38] hover:bg-[#c93631] text-white px-4 py-2 text-sm font-bold shadow-[0_4px_14px_0_rgba(227,62,56,0.25)] transition-all transform hover:-translate-y-0.5"
+                    class="inline-flex items-center justify-center rounded-xl bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 text-sm shadow-[0_4px_14px_0_rgba(227,62,56,0.25)] transition-all transform hover:-translate-y-0.5"
                     @click="openDetails(course)"
                   >
                     View Details
@@ -155,13 +146,18 @@
         v-if="selectedCourse"
         class="absolute top-0 right-0 h-full w-full md:w-[420px] bg-white border-l border-slate-100 shadow-2xl z-30"
       >
-        <div class="h-20 px-6 flex items-center justify-between border-b border-slate-100">
+        <div
+          class="h-20 px-6 flex items-center justify-between border-b border-slate-100"
+        >
           <div class="min-w-0">
-            <div class="text-xs font-extrabold tracking-widest uppercase text-[#160d27]">
+            <div
+              class="text-xs font-extrabold tracking-widest uppercase text-[#160d27]"
+            >
               Course Details
             </div>
             <div class="text-sm font-bold text-slate-900 truncate mt-0.5">
-              {{ selectedCourse.course_id }} • {{ selectedCourse.title || "Untitled" }}
+              {{ selectedCourse.course_id }} •
+              {{ selectedCourse.title || "Untitled" }}
             </div>
           </div>
           <button
@@ -174,7 +170,7 @@
           </button>
         </div>
 
-        <div class="p-6 space-y-6 overflow-auto h-[calc(100%-5rem)]">
+        <div class="p-6 space-y-6">
           <div class="flex items-center gap-2">
             <span
               class="inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold ring-1 ring-inset"
@@ -182,13 +178,18 @@
             >
               {{ selectedCourse.specialization || "Unknown" }}
             </span>
-            <span v-if="selectedCourse.credits" class="text-xs font-bold text-slate-500">
+            <span
+              v-if="selectedCourse.credits"
+              class="text-xs font-bold text-slate-500"
+            >
               {{ selectedCourse.credits }} Units
             </span>
           </div>
 
           <div v-if="selectedCourse.description" class="space-y-2">
-            <div class="text-xs font-extrabold tracking-widest uppercase text-slate-500">
+            <div
+              class="text-xs font-extrabold tracking-widest uppercase text-slate-500"
+            >
               Description
             </div>
             <p class="text-sm font-medium text-slate-700 leading-relaxed">
@@ -197,7 +198,9 @@
           </div>
 
           <div v-if="selectedCourse.prerequisites?.length" class="space-y-3">
-            <div class="text-xs font-extrabold tracking-widest uppercase text-slate-500">
+            <div
+              class="text-xs font-extrabold tracking-widest uppercase text-slate-500"
+            >
               Prerequisites
             </div>
             <div class="flex flex-wrap gap-2">
@@ -212,7 +215,9 @@
           </div>
 
           <div v-if="selectedCourse.technical_skills?.length" class="space-y-3">
-            <div class="text-xs font-extrabold tracking-widest uppercase text-slate-500">
+            <div
+              class="text-xs font-extrabold tracking-widest uppercase text-slate-500"
+            >
               Technical Skills
             </div>
             <div class="flex flex-wrap gap-2">
@@ -237,9 +242,11 @@ import { computed, ref } from "vue";
 const query = ref("");
 const selectedCourse = ref(null);
 
-const { data: courses, pending, error } = await useFetch(
-  "http://127.0.0.1:8000/api/graph",
-);
+const {
+  data: courses,
+  pending,
+  error,
+} = await useFetch("http://127.0.0.1:8000/api/graph");
 
 const normalizedCourses = computed(() => {
   return Array.isArray(courses.value) ? courses.value : [];
@@ -279,4 +286,3 @@ const tagStyle = (specialization) => {
   };
 };
 </script>
-

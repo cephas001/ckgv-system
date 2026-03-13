@@ -1,0 +1,23 @@
+[
+    {
+        "course_id": "CMP 401",
+        "title": "Advanced Compilers",
+        "credits": 3,
+        "specialization": "Systems & Architecture",
+        "technical_skills": [
+            "Register Allocation",
+            "Code Optimization"
+        ],
+        "prerequisites": [],
+        "synopsis": "Students will learn Code Optimization and Register Allocation."
+    },
+    {
+        "course_id": "CMP 402",
+        "title": "Cloud Computing",
+        "credits": 3,
+        "specialization": "Core Computer Science",
+        "technical_skills": [],
+        "prerequisites": [],
+        "synopsis": "Instruction covers Microservices Architecture and Distributed Systems."
+    }
+]
