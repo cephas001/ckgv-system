@@ -1,10 +1,17 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, status
 from fastapi.middleware.cors import CORSMiddleware 
 from pydantic import BaseModel 
 from typing import List, Optional 
 from nlp_processor import CurriculumParser
 from io import StringIO
-from datetime import datetime
+from datetime import datetime, timedelta
+from jose import jwt, JWTError
+from passlib.context import CryptContext
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from database import get_db
+from models import AdminUser
+from pydantic import BaseModel
 import shutil
 import csv
 import json
@@ -14,6 +21,38 @@ DATA_PATH = os.path.join("data", "courses.json")
 
 app = FastAPI()
 parser = CurriculumParser()
+
+# --- JWT CONFIGURATION ---
+SECRET_KEY = "mcpherson_ckgv_secret_key_2026"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+# --- AUTHENTICATION ENDPOINT ---
+@app.post("/api/auth/login")
+async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
+    # 1. Search for the user in the PostgreSQL Database
+    result = await db.execute(select(AdminUser).where(AdminUser.Username == request.username))
+    user = result.scalars().first()
+
+    # 2. Verify user exists and password matches
+    if not user or not pwd_context.verify(request.password, user.PasswordHash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+        )
+
+    # 3. Generate a secure JWT Token
+    expiration = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token_data = {"sub": user.Username, "role": user.Role, "exp": expiration}
+    access_token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+
+    return {"access_token": access_token, "token_type": "bearer"}
 
 # Create a Schema for the incoming course
 class CourseCreate(BaseModel):

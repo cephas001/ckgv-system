@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute top-0 right-0 w-80 lg:w-96 h-full bg-white border-l border-white text-black shadow-2xl transition-transform duration-300 ease-in-out z-20 flex flex-col pt-5"
+    class="fixed top-0 right-0 w-80 lg:w-96 h-screen bg-white border-l border-slate-100 text-black shadow-2xl transition-transform duration-300 ease-in-out z-[100] flex flex-col pt-5"
     :class="selectedData ? 'translate-x-0' : 'translate-x-full'"
   >
     <div v-if="selectedData" class="p-6 overflow-y-auto flex-1 text-black">
@@ -24,7 +24,7 @@
           {{ selectedData.course_id }} • {{ selectedData.credits }} Units
         </p>
 
-        <div class="mb-6 bg-gray-100 p-4 rounded-lg border border-slate-700">
+        <div class="mb-6 bg-gray-100 p-4 rounded-lg border border-slate-200">
           <h3
             class="text-sm font-semibold text-black mb-2 uppercase tracking-wider"
           >

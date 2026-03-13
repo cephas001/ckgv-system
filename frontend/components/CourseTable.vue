@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex flex-col bg-white">
+  <div class="w-full h-full flex flex-col bg-white relative overflow-hidden">
     <div class="px-8 pt-7 pb-5 border-b border-slate-100">
       <div class="flex items-center justify-between gap-4">
         <div class="w-full max-w-md">
@@ -93,9 +93,7 @@
                 class="hover:bg-slate-50/70 transition-colors"
               >
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-black">
-                    {{ course.course_id }}
-                  </div>
+                  <div class="text-sm text-black">{{ course.course_id }}</div>
                 </td>
                 <td class="px-6 py-4 min-w-[320px]">
                   <div class="text-sm text-black">
@@ -120,7 +118,6 @@
                   </button>
                 </td>
               </tr>
-
               <tr v-if="filteredCourses.length === 0">
                 <td colspan="4" class="px-6 py-10 text-center">
                   <div class="text-sm font-semibold text-slate-500">
@@ -134,105 +131,10 @@
       </div>
     </div>
 
-    <transition
-      enter-active-class="transition duration-200 ease-out"
-      enter-from-class="transform translate-x-6 opacity-0"
-      enter-to-class="transform translate-x-0 opacity-100"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="transform translate-x-0 opacity-100"
-      leave-to-class="transform translate-x-6 opacity-0"
-    >
-      <div
-        v-if="selectedCourse"
-        class="absolute top-0 right-0 h-full w-full md:w-[420px] bg-white border-l border-slate-100 shadow-2xl z-30"
-      >
-        <div
-          class="h-20 px-6 flex items-center justify-between border-b border-slate-100"
-        >
-          <div class="min-w-0">
-            <div
-              class="text-xs font-extrabold tracking-widest uppercase text-[#160d27]"
-            >
-              Course Details
-            </div>
-            <div class="text-sm font-bold text-slate-900 truncate mt-0.5">
-              {{ selectedCourse.course_id }} •
-              {{ selectedCourse.title || "Untitled" }}
-            </div>
-          </div>
-          <button
-            type="button"
-            class="h-10 w-10 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
-            @click="selectedCourse = null"
-            aria-label="Close details"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div class="p-6 space-y-6">
-          <div class="flex items-center gap-2">
-            <span
-              class="inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold ring-1 ring-inset"
-              :style="tagStyle(selectedCourse.specialization)"
-            >
-              {{ selectedCourse.specialization || "Unknown" }}
-            </span>
-            <span
-              v-if="selectedCourse.credits"
-              class="text-xs font-bold text-slate-500"
-            >
-              {{ selectedCourse.credits }} Units
-            </span>
-          </div>
-
-          <div v-if="selectedCourse.description" class="space-y-2">
-            <div
-              class="text-xs font-extrabold tracking-widest uppercase text-slate-500"
-            >
-              Description
-            </div>
-            <p class="text-sm font-medium text-slate-700 leading-relaxed">
-              {{ selectedCourse.description }}
-            </p>
-          </div>
-
-          <div v-if="selectedCourse.prerequisites?.length" class="space-y-3">
-            <div
-              class="text-xs font-extrabold tracking-widest uppercase text-slate-500"
-            >
-              Prerequisites
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="pre in selectedCourse.prerequisites"
-                :key="pre"
-                class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-3 py-1 text-xs font-bold"
-              >
-                {{ pre }}
-              </span>
-            </div>
-          </div>
-
-          <div v-if="selectedCourse.technical_skills?.length" class="space-y-3">
-            <div
-              class="text-xs font-extrabold tracking-widest uppercase text-slate-500"
-            >
-              Technical Skills
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="skill in selectedCourse.technical_skills"
-                :key="skill"
-                class="inline-flex items-center rounded-full bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-200 px-3 py-1 text-xs font-bold"
-              >
-                {{ skill }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
+    <DetailsPanel
+      :selectedData="selectedCourse"
+      @close="selectedCourse = null"
+    />
   </div>
 </template>
 
@@ -264,7 +166,7 @@ const filteredCourses = computed(() => {
 });
 
 const openDetails = (course) => {
-  selectedCourse.value = course;
+  selectedCourse.value = { ...course, type: "course" };
 };
 
 const tagStyle = (specialization) => {

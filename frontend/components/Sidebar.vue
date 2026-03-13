@@ -36,11 +36,11 @@
 
     <div class="p-4 border-t border-slate-100 space-y-3">
       <NuxtLink
-        to="/admin/login"
+        to="/admin/dashboard"
         :class="[
           route.path.startsWith('/admin')
             ? 'text-black'
-            : ' text-slate-400 hover:text-slate-700',
+            : 'text-slate-400 hover:text-slate-700',
           'flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold hover:bg-slate-50 transition-colors',
         ]"
       >
@@ -61,22 +61,50 @@
         </svg>
       </NuxtLink>
 
-      <div class="flex items-center gap-3 px-2 py-2">
-        <div class="w-9 h-9 rounded-full flex items-center justify-center">
-          <img
-            src="/assets/images/avatar.png"
-            alt="Peter O."
-            class="w-full h-full object-cover rounded-full"
-          />
-        </div>
-        <div class="flex flex-col">
-          <span class="text-sm font-bold text-black/90 leading-none mb-1"
-            >Peter O.</span
+      <div
+        v-if="adminUsername"
+        class="flex items-center justify-between px-2 py-2 bg-slate-50 rounded-xl border border-slate-100"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm"
           >
-          <span class="text-xs font-medium text-black/70 leading-none"
-            >Administrator</span
-          >
+            {{ adminUsername.charAt(0).toUpperCase() }}
+          </div>
+          <div class="flex flex-col">
+            <span
+              class="text-sm font-semibold text-black leading-none mb-1 capitalize"
+            >
+              {{ adminUsername }}
+            </span>
+            <span
+              class="text-[10px] font-semibold tracking-widest uppercase text-emerald-600 leading-none"
+            >
+              Online
+            </span>
+          </div>
         </div>
+
+        <button
+          @click="handleLogout"
+          class="p-2 text-slate-400 hover:text-[#e33e38] hover:bg-red-50 rounded-lg transition-colors"
+          title="Secure Logout"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </aside>
@@ -96,4 +124,37 @@ const isActive = (path) => {
   if (path === "/") return route.path === "/" || route.path === "/graph";
   return route.path === path;
 };
+
+// --- LOGOUT LOGIC ---
+const handleLogout = async () => {
+  const token = useCookie("auth_token");
+  token.value = null; // Destroy the cookie
+  await navigateTo("/"); // Redirect to the public home page
+};
+
+// --- DYNAMIC JWT DECODING ---
+const adminUsername = computed(() => {
+  const token = useCookie("auth_token").value;
+  if (!token) return null;
+
+  try {
+    // A JWT is split into 3 parts by periods. We want the payload (index 1).
+    const payloadBase64 = token.split(".")[1];
+
+    // Decode from Base64
+    // We use a safe decode method to prevent SSR hydration errors
+    const decodedJson =
+      typeof window !== "undefined"
+        ? window.atob(payloadBase64)
+        : Buffer.from(payloadBase64, "base64").toString("ascii");
+
+    const parsedData = JSON.parse(decodedJson);
+
+    // 'sub' is the key we used in FastAPI for the username
+    return parsedData.sub;
+  } catch (error) {
+    console.error("Could not decode token", error);
+    return null;
+  }
+});
 </script>

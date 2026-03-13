@@ -123,12 +123,7 @@
       class="flex-1"
     />
 
-    <div
-      class="absolute top-0 right-0 w-full md:w-96 h-full bg-slate-800 border-l border-slate-700 shadow-2xl transition-transform duration-300 ease-in-out z-30"
-      :class="selectedData ? 'translate-x-0' : 'translate-x-full'"
-    >
-      <DetailsPanel :selectedData="selectedData" @close="selectedData = null" />
-    </div>
+    <DetailsPanel :selectedData="selectedData" @close="selectedData = null" />
 
     <div
       class="absolute bottom-6 left-10 z-20 flex flex-col items-start gap-3 pointer-events-auto"
