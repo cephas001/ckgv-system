@@ -3,8 +3,17 @@ from database import engine, Base, AsyncSessionLocal
 from models import AdminUser
 from passlib.context import CryptContext
 from sqlalchemy.future import select
+from dotenv import load_dotenv
+import os
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+load_dotenv()
+
+admin_password = os.getenv("ADMIN_PASSWORD")
+
+if not admin_password:
+    raise ValueError("CRITICAL: ADMIN_PASSWORD environment variable is not set.")
 
 async def init_models():
     # 1. Create the tables in PostgreSQL (Safely ignores if they exist)
@@ -20,8 +29,8 @@ async def init_models():
         if existing_admin:
             print("Admin user already exists in the database. Ready to go!")
         else:
-            # Hash the password "mcpherson2026"
-            hashed_pwd = pwd_context.hash("mcpherson2026")
+            # Hash the password loaded from the environment variables
+            hashed_pwd = pwd_context.hash(admin_password)
             
             new_admin = AdminUser(
                 Username="admin",
