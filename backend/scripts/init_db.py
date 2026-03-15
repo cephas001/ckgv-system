@@ -1,6 +1,6 @@
 import asyncio
-from database import engine, Base, AsyncSessionLocal
-from models import AdminUser
+from core.database import engine, Base, AsyncSessionLocal
+from backend.models.domain import AdminUser
 from passlib.context import CryptContext
 from sqlalchemy.future import select
 from dotenv import load_dotenv

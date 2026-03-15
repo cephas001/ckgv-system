@@ -9,8 +9,3 @@ nlp:
 # Start the FastAPI Server
 api:
 	uvicorn main:app --reload
-
-# Install all dependencies at once
-install:
-	pip install pdfplumber spacy transformers torch keybert fastapi uvicorn
-	python -m spacy download en_core_web_sm
