@@ -173,53 +173,22 @@
             </button>
           </h3>
           <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-3">
+            <div
+              v-for="track in availableTracks"
+              :key="track"
+              class="flex items-center gap-3"
+            >
               <div
-                class="w-3.5 h-3.5 rounded-full bg-blue-500 shadow-[0_0_8px_theme(colors.blue.500)]"
+                class="w-3.5 h-3.5 rounded-full"
+                :class="trackColors[track]"
               ></div>
-              <span class="text-sm text-slate-200 font-medium">Core CS</span>
+              <span class="text-sm text-slate-200 font-medium">{{
+                track
+              }}</span>
             </div>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-[0_0_8px_theme(colors.emerald.500)]"
-              ></div>
-              <span class="text-sm text-slate-200 font-medium"
-                >Software Engineering</span
-              >
-            </div>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-3.5 h-3.5 rounded-full bg-red-500 shadow-[0_0_8px_theme(colors.red.500)]"
-              ></div>
-              <span class="text-sm text-slate-200 font-medium"
-                >Cybersecurity</span
-              >
-            </div>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-3.5 h-3.5 rounded-full bg-purple-500 shadow-[0_0_8px_theme(colors.purple.500)]"
-              ></div>
-              <span class="text-sm text-slate-200 font-medium"
-                >Data & Algorithms</span
-              >
-            </div>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-3.5 h-3.5 rounded-full bg-cyan-500 shadow-[0_0_8px_theme(colors.cyan.500)]"
-              ></div>
-              <span class="text-sm text-slate-200 font-medium"
-                >Systems Architecture</span
-              >
-            </div>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-3.5 h-3.5 rounded-full bg-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)]"
-              ></div>
-              <span class="text-sm text-slate-200 font-medium"
-                >Artificial Intelligence</span
-              >
-            </div>
+
             <div class="h-px w-full bg-slate-700 my-1"></div>
+
             <div class="flex items-center gap-3">
               <div
                 class="w-3.5 h-3.5 rounded-full bg-amber-500 shadow-[0_0_8px_theme(colors.amber.500)]"
@@ -232,13 +201,35 @@
         </div>
       </transition>
 
-      <button
-        @click="showLegend = !showLegend"
-        class="flex items-center gap-2 bg-slate-800 border border-slate-600 px-4 py-2 rounded-full shadow-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
-      >
-        <IconsMap />
-        <span class="text-sm font-semibold">Map Legend</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          @click="showLegend = !showLegend"
+          class="flex items-center gap-2 bg-slate-800 border border-slate-600 px-4 py-2 rounded-full shadow-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
+        >
+          <IconsMap />
+        </button>
+
+        <button
+          @click="showHelpModal = true"
+          class="flex items-center justify-center w-10 h-10 bg-slate-800 border border-slate-600 rounded-full shadow-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
+          title="How to read this graph"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <div
@@ -258,6 +249,111 @@
       >
     </div>
   </div>
+
+  <transition
+    enter-active-class="transition duration-200 ease-out"
+    enter-from-class="opacity-0"
+    enter-to-class="opacity-100"
+    leave-active-class="transition duration-150 ease-in"
+    leave-from-class="opacity-100"
+    leave-to-class="opacity-0"
+  >
+    <div
+      v-if="showHelpModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white border border-slate-600 rounded-2xl p-6 max-w-md w-full shadow-2xl relative"
+      >
+        <button
+          @click="showHelpModal = false"
+          class="absolute top-4 right-4 text-slate-600 hover:text-black"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        <h2 class="text-xl font-bold text-black mb-4 flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-blue-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          How to Read the Graph
+        </h2>
+
+        <div class="space-y-4 text-black text-sm">
+          <p>
+            This interactive visualization maps McPherson University's Computer
+            Science curriculum to help you understand course progression.
+          </p>
+
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-black mt-1.5 shrink-0"></div>
+              <div>
+                <span class="tracking-wider font-semibold">Nodes:</span>
+                The large colored circles represent Courses. The small amber
+                circles represent Technical Skills taught in those courses.
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-black mt-1.5 shrink-0"></div>
+              <div>
+                <span class="tracking-wider font-semibold">Solid Lines:</span>
+                Indicate a strict prerequisite. The course at the start of the
+                arrow must be taken before the target course.
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-black mt-1.5 shrink-0"></div>
+              <div>
+                <span class="tracking-wider font-semibold">Dashed Lines:</span>
+                Indicate an acquired skill. They connect a course to the
+                technical skills you will learn by taking it.
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-black mt-1.5 shrink-0"></div>
+              <div>
+                <span class="tracking-wider font-semibold">Interaction:</span>
+                You can click any node to view detailed information in the side
+                panel, or click and drag a node to rearrange the visualization.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <button
+          @click="showHelpModal = false"
+          class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl transition-colors"
+        >
+          Got it, thanks!
+        </button>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script setup>
@@ -267,22 +363,46 @@ const selectedData = ref(null);
 const selectedTrack = ref(null);
 const isDropdownOpen = ref(false);
 const showLegend = ref(false);
-const showSkills = ref(false); // NEW: Default to a clean view!
-
-const availableTracks = [
-  "Core Computer Science",
-  "Software Engineering",
-  "Cybersecurity",
-  "Data & Algorithms",
-  "Systems & Architecture",
-  "Artificial Intelligence",
-];
+const showSkills = ref(false);
+const showHelpModal = ref(true);
 
 const {
   data: courses,
   pending,
   error,
 } = await useFetch("http://127.0.0.1:8000/api/graph");
+
+// --- 1. DYNAMICALLY EXTRACT SPECIALIZATIONS ---
+const availableTracks = computed(() => {
+  if (!courses.value) return [];
+  // Use a Set to extract unique specializations from the data
+  const tracks = new Set(
+    courses.value
+      .map((c) => c.specialization)
+      .filter((s) => s && s.trim() !== ""), // Filter out empties
+  );
+  return Array.from(tracks).sort(); // Sort alphabetically
+});
+
+// --- 2. DYNAMIC COLOR MAPPING FOR THE LEGEND ---
+// A palette of beautiful Tailwind colors for the nodes
+const colorPalette = [
+  "bg-blue-500 shadow-[0_0_8px_theme(colors.blue.500)]",
+  "bg-emerald-500 shadow-[0_0_8px_theme(colors.emerald.500)]",
+  "bg-purple-500 shadow-[0_0_8px_theme(colors.purple.500)]",
+  "bg-cyan-500 shadow-[0_0_8px_theme(colors.cyan.500)]",
+  "bg-rose-500 shadow-[0_0_8px_theme(colors.rose.500)]",
+  "bg-indigo-500 shadow-[0_0_8px_theme(colors.indigo.500)]",
+];
+
+const trackColors = computed(() => {
+  const mapping = {};
+  availableTracks.value.forEach((track, index) => {
+    // Modulo ensures we loop back to the start if we have more tracks than colors
+    mapping[track] = colorPalette[index % colorPalette.length];
+  });
+  return mapping;
+});
 
 // Function to handle selection and close the menu
 const handleTrackSelect = (track) => {
