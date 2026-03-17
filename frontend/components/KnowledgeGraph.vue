@@ -144,7 +144,11 @@
       class="flex-1"
     />
 
-    <DetailsPanel :selectedData="selectedData" @close="selectedData = null" />
+    <DetailsPanel
+      :selectedData="selectedData"
+      :courses="courses"
+      @close="selectedData = null"
+    />
 
     <div
       class="absolute bottom-6 left-10 z-20 flex flex-col items-start gap-3 pointer-events-auto"
@@ -364,7 +368,7 @@ const selectedTrack = ref(null);
 const isDropdownOpen = ref(false);
 const showLegend = ref(false);
 const showSkills = ref(false);
-const showHelpModal = ref(true);
+const showHelpModal = ref(false);
 
 const {
   data: courses,
