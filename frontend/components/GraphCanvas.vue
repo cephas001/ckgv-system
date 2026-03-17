@@ -1,9 +1,31 @@
 <template>
-  <div class="w-full h-full" ref="containerRef">
+  <div class="w-full h-full relative" ref="containerRef">
     <svg
       ref="svgRef"
       class="w-full h-full cursor-grab active:cursor-grabbing"
     ></svg>
+
+    <button
+      @click="recenterGraph"
+      class="absolute bottom-6 right-6 z-20 flex items-center justify-center w-12 h-12 bg-slate-800 border border-slate-600 rounded-full shadow-2xl text-slate-300 hover:text-white hover:bg-slate-700 hover:scale-105 transition-all"
+      title="Recenter Graph"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 3v4m0 10v4m-9-9h4m10 0h4"
+        />
+      </svg>
+    </button>
   </div>
 </template>
 
@@ -21,7 +43,11 @@ const emit = defineEmits(["nodeClicked"]);
 
 const svgRef = ref(null);
 const containerRef = ref(null);
+
+// Store references for the Recenter function
 let d3Group = null;
+let d3Zoom = null;
+let d3Svg = null;
 
 const renderGraph = () => {
   if (!props.courses || !svgRef.value || !containerRef.value) return;
@@ -29,15 +55,29 @@ const renderGraph = () => {
   const nodesMap = new Map();
   const links = [];
 
-  const colorMap = {
-    "Core Computer Science": "#3b82f6",
-    "Software Engineering": "#10b981",
-    Cybersecurity: "#ef4444",
-    "Data & Algorithms": "#8b5cf6",
-    "Systems & Architecture": "#06b6d4",
-    "Artificial Intelligence": "#d946ef",
-    default: "#94a3b8",
-  };
+  // --- OPTIMIZATION: DYNAMIC COLOR MAPPING ---
+  // Using exact hex codes matching the Tailwind classes in the parent component
+  const palette = [
+    "#3b82f6",
+    "#10b981",
+    "#a855f7",
+    "#06b6d4",
+    "#f43f5e",
+    "#6366f1",
+  ];
+  const colorMap = {};
+
+  const uniqueTracks = Array.from(
+    new Set(
+      props.courses
+        .map((c) => c.specialization)
+        .filter((s) => s && s.trim() !== ""),
+    ),
+  ).sort();
+
+  uniqueTracks.forEach((track, index) => {
+    colorMap[track] = palette[index % palette.length];
+  });
 
   props.courses.forEach((course) => {
     nodesMap.set(course.course_id, {
@@ -90,47 +130,43 @@ const renderGraph = () => {
   svg.selectAll("*").remove();
 
   d3Group = svg.append("g");
+  d3Svg = svg; // Store for recenter
 
-  svg.call(
-    d3
-      .zoom()
-      .extent([
-        [0, 0],
-        [width, height],
-      ])
-      .scaleExtent([0.1, 4])
-      .on("zoom", (event) => d3Group.attr("transform", event.transform)),
-  );
+  // Store zoom behavior instance for recenter
+  d3Zoom = d3
+    .zoom()
+    .extent([
+      [0, 0],
+      [width, height],
+    ])
+    .scaleExtent([0.1, 4])
+    .on("zoom", (event) => d3Group.attr("transform", event.transform));
 
-  // 1. MAX EXPANDED PENTAGON: Pushed to 0.48 to use the absolute edges of the screen
+  svg.call(d3Zoom);
+
+  // --- OPTIMIZATION: DYNAMIC PHYSICS CLUSTERS ---
   const radius = Math.min(width, height) * 0.48;
-  const angleStep = (2 * Math.PI) / 5;
+  const clusterCenters = {};
 
-  const clusterCenters = {
-    "Core Computer Science": { x: width / 2, y: height / 2 },
-    "Software Engineering": {
-      x: width / 2 + radius * Math.cos(0),
-      y: height / 2 + radius * Math.sin(0),
-    },
-    Cybersecurity: {
-      x: width / 2 + radius * Math.cos(angleStep),
-      y: height / 2 + radius * Math.sin(angleStep),
-    },
-    "Data & Algorithms": {
-      x: width / 2 + radius * Math.cos(angleStep * 2),
-      y: height / 2 + radius * Math.sin(angleStep * 2),
-    },
-    "Systems & Architecture": {
-      x: width / 2 + radius * Math.cos(angleStep * 3),
-      y: height / 2 + radius * Math.sin(angleStep * 3),
-    },
-    "Artificial Intelligence": {
-      x: width / 2 + radius * Math.cos(angleStep * 4),
-      y: height / 2 + radius * Math.sin(angleStep * 4),
-    },
-  };
+  // Clone array so we don't mutate the original
+  const tracksForClustering = [...uniqueTracks];
 
-  // 2. MAX PHYSICS: Longest links, strongest repulsion, largest collision boundaries
+  // Force Core CS to the center if it exists
+  const coreIndex = tracksForClustering.indexOf("Core Computer Science");
+  if (coreIndex !== -1) {
+    const coreTrack = tracksForClustering.splice(coreIndex, 1)[0];
+    clusterCenters[coreTrack] = { x: width / 2, y: height / 2 };
+  }
+
+  // Distribute the remaining tracks evenly in a perfect circle
+  const angleStep = (2 * Math.PI) / (tracksForClustering.length || 1);
+  tracksForClustering.forEach((track, index) => {
+    clusterCenters[track] = {
+      x: width / 2 + radius * Math.cos(angleStep * index),
+      y: height / 2 + radius * Math.sin(angleStep * index),
+    };
+  });
+
   const simulation = d3
     .forceSimulation(nodes)
     .force(
@@ -139,12 +175,12 @@ const renderGraph = () => {
         .forceLink(links)
         .id((d) => d.id)
         .distance(160),
-    ) // Pushed to 160
+    )
     .force(
       "charge",
       d3.forceManyBody().strength(props.showSkills ? -600 : -1200),
-    ) // Massive repulsion
-    .force("collide", d3.forceCollide().radius(55)) // Pushed to 55
+    )
+    .force("collide", d3.forceCollide().radius(55))
     .force(
       "x",
       d3
@@ -187,9 +223,7 @@ const renderGraph = () => {
     .join("circle")
     .attr("r", (d) => (d.group === "course" ? 14 : 7))
     .attr("fill", (d) =>
-      d.group === "skill"
-        ? "#f59e0b"
-        : colorMap[d.specialization] || colorMap.default,
+      d.group === "skill" ? "#f59e0b" : colorMap[d.specialization] || "#94a3b8",
     )
     .attr("cursor", "pointer")
     .call(drag(simulation));
@@ -221,6 +255,20 @@ const renderGraph = () => {
   });
 
   applyFilter(props.selectedTrack);
+};
+
+// --- NEW FEATURE 2: Recenter Logic ---
+const recenterGraph = () => {
+  if (!d3Svg || !d3Zoom || !containerRef.value) return;
+
+  const width = containerRef.value.clientWidth;
+  const height = containerRef.value.clientHeight;
+
+  // Transition smoothly back to default scale (1) and translation (0,0)
+  d3Svg
+    .transition()
+    .duration(750)
+    .call(d3Zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
 };
 
 const applyFilter = (track) => {
