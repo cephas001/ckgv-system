@@ -21,6 +21,7 @@ class CourseUpdate(BaseModel):
     title: str
     specialization: str
     technical_skills: List[str]
+    prerequisites: Optional[List[str]] = []
 
 @router.get("/graph")
 def get_graph_data():
@@ -61,6 +62,8 @@ async def update_course(course_id: str, update_data: CourseUpdate):
             course["title"] = update_data.title
             course["specialization"] = update_data.specialization
             course["technical_skills"] = update_data.technical_skills
+            if update_data.prerequisites is not None:
+                course["prerequisites"] = update_data.prerequisites
             course_found = True
             break
 

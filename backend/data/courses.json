@@ -238,7 +238,8 @@
         "course_id": "CMP 403",
         "title": "Human-Computer Interaction",
         "prerequisites": [
-            "CMP 211"
+            "CMP 211",
+            "SEN 304"
         ],
         "credits": 2,
         "synopsis": "This course examines the design, evaluation, and implementation of interactive computing systems for human use. Students will develop highly sought-after skills in User Experience (UX) Design, Wireframing, conducting Usability Testing, and rapid Prototyping. The curriculum emphasizes cognitive psychology principles and accessibility standards in software interfaces. All students must complete the mandatory course evaluation form before the final examination docket can be issued by the faculty officer.",
@@ -318,7 +319,9 @@
         "course_id": "SEN 304",
         "title": "Advanced Web Systems & Agile Workflows",
         "specialization": "Software Engineering",
-        "prerequisites": [],
+        "prerequisites": [
+            "CMP 211"
+        ],
         "technical_skills": [
             "JavaScript",
             "CSS3",

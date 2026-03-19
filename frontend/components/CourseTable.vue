@@ -266,22 +266,24 @@
           <div>
             <label
               class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
-              >Course Title</label
             >
+              Course Title
+            </label>
             <input
               v-model="editForm.title"
               type="text"
-              class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:ring-1 focus:ring-indigo-500"
+              class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:border-black outline-none text-sm text-black"
             />
           </div>
           <div>
             <label
               class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
-              >Specialization</label
             >
+              Specialization
+            </label>
             <select
               v-model="editForm.specialization"
-              class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:ring-1 focus:ring-indigo-500"
+              class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:border-black outline-none text-sm text-black"
             >
               <option
                 v-for="track in availableSpecializations"
@@ -292,14 +294,30 @@
               </option>
             </select>
           </div>
+
           <div>
             <label
               class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
-              >Extracted Skills (Comma Separated)</label
             >
+              Prerequisites (Comma Separated)
+            </label>
+            <input
+              v-model="editForm.prerequisites_str"
+              type="text"
+              placeholder="e.g. CMP 101, MTH 101"
+              class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:border-black outline-none text-sm text-black"
+            />
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-bold text-black uppercase tracking-wide mb-2"
+            >
+              Extracted Skills (Comma Separated)
+            </label>
             <textarea
-              :value="editForm.technical_skills?.join(', ')"
-              class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm h-20 focus:ring-1 focus:ring-indigo-500 resize-none"
+              v-model="editForm.technical_skills_str"
+              class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:border-black outline-none text-sm h-20 resize-none text-black"
             ></textarea>
             <p class="text-[10px] text-slate-400 mt-1">
               Manual override for spaCy NLP extraction.
@@ -311,7 +329,7 @@
         >
           <button
             @click="isEditing = false"
-            class="px-5 py-2 text-sm font-bold text-black hover:text-slate-700"
+            class="px-5 py-2 text-sm text-black hover:text-slate-700"
           >
             Cancel
           </button>
@@ -369,26 +387,35 @@ const editForm = ref(null);
 
 // --- ADD THIS TO HANDLE EDIT CLICK ---
 const openEdit = (course) => {
-  // Create a deep copy of the course so we don't accidentally mutate the table before saving
+  // Create a deep copy of the course
   editForm.value = JSON.parse(JSON.stringify(course));
+
+  // Convert arrays to comma-separated strings for the input fields
+  editForm.value.prerequisites_str = (course.prerequisites || []).join(", ");
+  editForm.value.technical_skills_str = (course.technical_skills || []).join(
+    ", ",
+  );
+
   isEditing.value = true;
 };
 
+// --- UPDATED: SAVE EDITS ---
 const saveEdit = async () => {
   isSaving.value = true;
 
   try {
-    // 1. Format the technical skills back into an array
-    let updatedSkills = [];
-    if (typeof editForm.value.technical_skills === "string") {
-      // Splits by comma, removes extra spaces, and filters out empty strings
-      updatedSkills = editForm.value.technical_skills
-        .split(",")
-        .map((skill) => skill.trim())
-        .filter((skill) => skill.length > 0);
-    } else if (Array.isArray(editForm.value.technical_skills)) {
-      updatedSkills = editForm.value.technical_skills;
-    }
+    // 1. Format the strings back into clean arrays
+    const updatedSkills = editForm.value.technical_skills_str
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter((skill) => skill.length > 0);
+
+    const updatedPrereqs = editForm.value.prerequisites_str
+      .split(",")
+      .map((pre) => pre.trim().toUpperCase()) // Force course codes to be uppercase
+      .filter((pre) => pre.length > 0);
+
+    console.log(updatedPrereqs);
 
     // 2. Send the real update request to FastAPI
     await $fetch(
@@ -399,6 +426,7 @@ const saveEdit = async () => {
           title: editForm.value.title,
           specialization: editForm.value.specialization,
           technical_skills: updatedSkills,
+          prerequisites: updatedPrereqs, // NEW: Sending prereqs to backend
         },
       },
     );
@@ -411,13 +439,13 @@ const saveEdit = async () => {
       courses.value[index].title = editForm.value.title;
       courses.value[index].specialization = editForm.value.specialization;
       courses.value[index].technical_skills = updatedSkills;
+      courses.value[index].prerequisites = updatedPrereqs; // NEW: Updating local state
     }
 
     // Close modal and clean up
     isEditing.value = false;
     editForm.value = null;
 
-    // Optional: You can replace this alert with your beautiful Toast Notification!
     triggerNotification(
       `Successfully updated: ${courses.value[index].course_id}`,
       "success",
@@ -432,7 +460,6 @@ const saveEdit = async () => {
     isSaving.value = false;
   }
 };
-
 // --- ADD THIS TO HANDLE DELETE CLICK ---
 const deleteCourse = async (courseId) => {
   // 1. Prevent accidental clicks
