@@ -287,16 +287,6 @@
         ]
     },
     {
-        "course_id": "CMP 317",
-        "title": "Test Course 2",
-        "specialization": "Core Computer Science",
-        "prerequisites": [],
-        "technical_skills": [
-            "Process Scheduling",
-            "Memory Management"
-        ]
-    },
-    {
         "course_id": "CMP 397",
         "title": "Managing Memories",
         "specialization": "Software Engineering",

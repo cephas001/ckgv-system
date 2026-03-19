@@ -1,7 +1,9 @@
 <template>
   <div class="w-full h-full flex flex-col bg-white relative overflow-hidden">
     <div class="px-8 pt-7 pb-5 border-b border-slate-100">
-      <div class="flex items-center justify-between gap-4">
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+      >
         <div class="w-full max-w-md">
           <label class="sr-only" for="course-search">Search</label>
           <div class="relative">
@@ -30,6 +32,43 @@
               placeholder="e.g. CSC 201, Data Structures..."
               class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-black/90 placeholder:text-black/90 focus:outline-none focus:ring-1 focus:ring-black"
             />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <label for="sort-select" class="text-sm text-black whitespace-nowrap">
+            Sort by:
+          </label>
+          <div class="relative w-full sm:w-48">
+            <select
+              id="sort-select"
+              v-model="sortBy"
+              class="w-full appearance-none pl-2 py-1 border border-slate-200 bg-white text-sm text-black outline-none cursor-pointer"
+            >
+              <option value="code_asc">Code (A-Z)</option>
+              <option value="code_desc">Code (Z-A)</option>
+              <option value="title_asc">Title (A-Z)</option>
+              <option value="title_desc">Title (Z-A)</option>
+              <option value="spec_asc">Specialization (A-Z)</option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +151,7 @@
                   <div class="flex items-center justify-end gap-2">
                     <button
                       type="button"
-                      class="p-2 rounded-lg text-black hover:text-blue-600 hover:bg-blue-50 transition-all"
+                      class="p-2 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
                       title="View Course Analytics"
                       @click="openDetails(course)"
                     >
@@ -141,7 +180,7 @@
                     <button
                       v-if="isAdmin"
                       type="button"
-                      class="p-2 rounded-lg text-black hover:text-emerald-600 hover:bg-emerald-50 transition-all"
+                      class="p-2 rounded-lg text-slate-700 hover:text-emerald-600 hover:bg-emerald-50 transition-all"
                       title="Edit Course Data"
                       @click="openEdit(course)"
                     >
@@ -164,7 +203,7 @@
                     <button
                       v-if="isAdmin"
                       type="button"
-                      class="p-2 rounded-lg text-black hover:text-red-600 hover:bg-red-50 transition-all"
+                      class="p-2 rounded-lg text-slate-700 hover:text-red-600 hover:bg-red-50 transition-all"
                       title="Delete Course"
                       @click="deleteCourse(course.course_id)"
                     >
@@ -316,6 +355,7 @@ import { computed, ref } from "vue";
 const query = ref("");
 const selectedCourse = ref(null);
 const isSaving = ref(false);
+const sortBy = ref("code_asc");
 
 const { triggerNotification } = useNotification();
 
@@ -434,13 +474,42 @@ const normalizedCourses = computed(() => {
 });
 
 const filteredCourses = computed(() => {
-  const q = query.value.toLowerCase();
-  if (!q) return normalizedCourses.value;
+  let result = normalizedCourses.value;
 
-  return normalizedCourses.value.filter((c) => {
-    const id = String(c?.course_id ?? "").toLowerCase();
-    const title = String(c?.title ?? "").toLowerCase();
-    return id.includes(q) || title.includes(q);
+  // 1. Filter by search query
+  const q = query.value.toLowerCase();
+  if (q) {
+    result = result.filter((c) => {
+      const id = String(c?.course_id ?? "").toLowerCase();
+      const title = String(c?.title ?? "").toLowerCase();
+      return id.includes(q) || title.includes(q);
+    });
+  }
+
+  // 2. Sort the results
+  // We spread into a new array [...result] to avoid mutating the original data
+  return [...result].sort((a, b) => {
+    const codeA = String(a.course_id || "").toLowerCase();
+    const codeB = String(b.course_id || "").toLowerCase();
+    const titleA = String(a.title || "").toLowerCase();
+    const titleB = String(b.title || "").toLowerCase();
+    const specA = String(a.specialization || "").toLowerCase();
+    const specB = String(b.specialization || "").toLowerCase();
+
+    switch (sortBy.value) {
+      case "code_asc":
+        return codeA.localeCompare(codeB);
+      case "code_desc":
+        return codeB.localeCompare(codeA);
+      case "title_asc":
+        return titleA.localeCompare(titleB);
+      case "title_desc":
+        return titleB.localeCompare(titleA);
+      case "spec_asc":
+        return specA.localeCompare(specB);
+      default:
+        return 0;
+    }
   });
 });
 
