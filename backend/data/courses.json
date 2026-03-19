@@ -5,7 +5,9 @@
         "prerequisites": [],
         "credits": 3,
         "synopsis": "This foundational course introduces students to the fundamental concepts of information technology and computer systems. Students will gain hands-on experience with Hardware Architecture, Binary Arithmetic, Operating Systems, and basic Word Processing. The curriculum explores the historical evolution of computing devices and their modern-day applications in various industries. Students are expected to attend all weekly laboratory sessions and submit a final written report.",
-        "technical_skills": [],
+        "technical_skills": [
+            "Information Technology"
+        ],
         "specialization": "Core Computer Science"
     },
     {
@@ -16,8 +18,10 @@
         ],
         "credits": 3,
         "synopsis": "This course equips students with the logical reasoning required to translate complex problems into computational solutions. The technical curriculum focuses heavily on designing Flowcharts, writing Pseudocode, implementing logic in Python, and performing Syntax Debugging. Students will learn how to structure algorithms efficiently before writing actual code. Continuous assessment tests will be administered periodically, and a minimum attendance of 75% is strictly required to sit for the final examination.",
-        "technical_skills": [],
-        "specialization": "Core Computer Science"
+        "technical_skills": [
+            "Python"
+        ],
+        "specialization": "Software Engineering"
     },
     {
         "course_id": "CMP 201",
@@ -28,7 +32,9 @@
         "credits": 3,
         "synopsis": "This module transitions students from procedural programming to modern software design paradigms. Core technical competencies developed in this class include Object-Oriented Programming, Java, Encapsulation, and Polymorphism. Students will build modular, reusable software components and understand class hierarchies. All practical assignments must be submitted via the university's learning management system before the stipulated deadlines. Late submissions will attract a severe penalty.",
         "technical_skills": [
-            "Java"
+            "Java",
+            "Encapsulation",
+            "Polymorphism"
         ],
         "specialization": "Software Engineering"
     },
@@ -41,8 +47,12 @@
         "credits": 3,
         "synopsis": "Building upon foundational OOP concepts, this advanced course dives into complex software architecture and memory management. Students will master C++, Multithreading, Exception Handling, and the development of Graphical User Interfaces (GUI). The course emphasizes writing robust, high-performance applications for desktop environments. Students must participate actively in group discussions and maintain a comprehensive laboratory workbook throughout the semester.",
         "technical_skills": [
-            "memory management",
-            "C++"
+            "Memory Management",
+            "C++",
+            "Multithreading",
+            "Exception Handling",
+            "Graphical User Interfaces",
+            "GUI"
         ],
         "specialization": "Software Engineering"
     },
@@ -71,9 +81,13 @@
         "credits": 3,
         "synopsis": "This theoretical course establishes the mathematical foundations necessary for advanced computer science topics. The syllabus rigorously covers Boolean Algebra, Set Theory, Graph Theory, and Combinatorics. These mathematical constructs are essential for understanding algorithm analysis, cryptography, and network topology. Weekly problem sets will be distributed by the course lecturer, and students must ensure all assignments are neatly handwritten and submitted to the class representative.",
         "technical_skills": [
-            "cryptography"
+            "Boolean Algebra",
+            "Set Theory",
+            "Graph Theory",
+            "Combinatorics",
+            "Cryptography"
         ],
-        "specialization": "Cybersecurity"
+        "specialization": "Core Computer Science"
     },
     {
         "course_id": "CMP 214",
@@ -84,6 +98,8 @@
         "credits": 3,
         "synopsis": "This course introduces the methodologies used to design, implement, and maintain complex information systems. Students will acquire practical skills in utilizing the Unified Modeling Language (UML), applying Agile Methodology, drafting Entity-Relationship Diagrams, and conducting Feasibility Studies. The focus is on bridging the gap between business requirements and software solutions. A mid-semester examination will form a core component of the continuous assessment, and students are expected to adhere strictly to the university dress code during presentations.",
         "technical_skills": [
+            "Information Systems",
+            "Unified Modeling Language",
             "UML",
             "Agile Methodology"
         ],
@@ -116,7 +132,8 @@
             "Process Scheduling",
             "Memory Management",
             "Bash Scripting",
-            "POSIX Threads"
+            "POSIX Threads",
+            "Concurrency"
         ],
         "specialization": "Systems & Architecture"
     },
@@ -128,8 +145,12 @@
         ],
         "credits": 3,
         "synopsis": "This course provides an in-depth look at how data is transmitted across local and wide area networks. Students will gain hands-on expertise in configuring TCP/IP, calculating Subnetting, implementing Routing Protocols, and analyzing Packet Switching mechanisms. The curriculum covers the OSI model and modern networking hardware. Practical sessions will be held in the Cisco networking laboratory, and students must sign the attendance register upon entry and exit.",
-        "technical_skills": [],
-        "specialization": "Core Computer Science"
+        "technical_skills": [
+            "Subnetting",
+            "Routing Protocols",
+            "Packet Switching"
+        ],
+        "specialization": "Cybersecurity"
     },
     {
         "course_id": "CMP 307",
@@ -141,10 +162,11 @@
         "synopsis": "This course teaches the principles of storing, retrieving, and managing large datasets securely and efficiently. Students will develop strong technical proficiencies in SQL, configuring Relational Database Management Systems (RDBMS), applying data Normalization, and utilizing NoSQL databases. The course emphasizes data integrity, transaction management, and query optimization. A comprehensive term paper is required at the end of the semester, and students must ensure their work is free from any form of plagiarism.",
         "technical_skills": [
             "SQL",
-            "Relational Database",
+            "Relational Database Management Systems",
             "RDBMS",
             "Normalization",
-            "NoSQL"
+            "NoSQL",
+            "Query Optimization"
         ],
         "specialization": "Data & Algorithms"
     },
@@ -161,7 +183,7 @@
             "Neural Networks",
             "Natural Language Processing",
             "Heuristic Search",
-            "predictive models"
+            "Predictive Models"
         ],
         "specialization": "Artificial Intelligence"
     },
@@ -173,7 +195,11 @@
         ],
         "credits": 3,
         "synopsis": "This theoretical computer science course explores the mathematical models of computation and their limitations. Students will rigorously study Finite State Machines, construct Regular Expressions, design Context-Free Grammars, and analyze Turing Machines. These concepts form the bedrock for understanding computability and the design of programming languages. Regular attendance is a prerequisite for passing this course, and students are expected to participate actively in all theoretical tutorial sessions.",
-        "technical_skills": [],
+        "technical_skills": [
+            "Finite State Machines",
+            "Regular Expressions",
+            "Turing Machines"
+        ],
         "specialization": "Core Computer Science"
     },
     {
@@ -184,19 +210,29 @@
         ],
         "credits": 3,
         "synopsis": "This course demystifies the process of translating high-level programming languages into machine-executable code. The technical syllabus focuses on the front-end phases of compilation, specifically Lexical Analysis, Syntax Parsing, generating Abstract Syntax Trees, and managing Symbol Tables. Students will build a basic scanner and parser for a custom programming language. Students are required to submit a weekly progress report to their assigned laboratory instructors and maintain a clean working environment in the computer room.",
-        "technical_skills": [],
-        "specialization": "Data & Algorithms"
+        "technical_skills": [
+            "Lexical Analysis",
+            "Syntax Parsing",
+            "Abstract Syntax Trees"
+        ],
+        "specialization": "Systems & Architecture"
     },
     {
         "course_id": "CMP 401",
-        "title": "Advanced Compilers",
+        "title": "Software Engineering",
         "prerequisites": [
             "CMP 214"
         ],
         "credits": 3,
         "synopsis": "This capstone-level course prepares students for the realities of commercial software development and project management. Students will master the Scrum Framework, utilize Version Control (Git), implement Continuous Integration/Continuous Deployment (CI/CD) pipelines, and execute automated Software Testing. The course simulates a real-world software development lifecycle from requirements gathering to deployment. The final grade will be heavily weighted on the group project presentation, and students must dress in formal corporate attire during the defense.",
-        "technical_skills": [],
-        "specialization": "Core Computer Science"
+        "technical_skills": [
+            "Scrum Framework",
+            "Version Control",
+            "Git",
+            "Continuous Integration",
+            "Software Testing"
+        ],
+        "specialization": "Software Engineering"
     },
     {
         "course_id": "CMP 403",
@@ -207,7 +243,10 @@
         "credits": 2,
         "synopsis": "This course examines the design, evaluation, and implementation of interactive computing systems for human use. Students will develop highly sought-after skills in User Experience (UX) Design, Wireframing, conducting Usability Testing, and rapid Prototyping. The curriculum emphasizes cognitive psychology principles and accessibility standards in software interfaces. All students must complete the mandatory course evaluation form before the final examination docket can be issued by the faculty officer.",
         "technical_skills": [
-            "User Experience"
+            "User Experience",
+            "Wireframing",
+            "Usability Testing",
+            "Prototyping"
         ],
         "specialization": "Software Engineering"
     },
@@ -219,7 +258,10 @@
         ],
         "credits": 3,
         "synopsis": "This course explores the architecture and development of applications that rely heavily on network communications and distributed resources. Technical instruction covers Cloud Computing, the architecture of Distributed Systems, low-level Socket Programming, and designing Microservices Architecture. Students will learn how to build scalable, fault-tolerant applications deployed across multiple servers. Attendance at the departmental seminar series is compulsory for all final-year students, and a summary report must be attached to the final assignment.",
-        "technical_skills": [],
+        "technical_skills": [
+            "Cloud Computing",
+            "Distributed Systems"
+        ],
         "specialization": "Core Computer Science"
     },
     {
@@ -268,54 +310,24 @@
         "technical_skills": [
             "Code Optimization",
             "Register Allocation",
-            "Intermediate Code Generation",
-            "Target Machine Code"
+            "Intermediate Code Generation"
         ],
         "specialization": "Systems & Architecture"
     },
     {
-        "course_id": "CMP 318",
-        "title": "Test Course 1",
+        "course_id": "SEN 304",
+        "title": "Advanced Web Systems & Agile Workflows",
         "specialization": "Software Engineering",
         "prerequisites": [],
         "technical_skills": [
-            "Agile",
-            "UML",
-            "SDLC",
-            "Scrum",
-            "Git"
-        ]
-    },
-    {
-        "course_id": "CMP 397",
-        "title": "Managing Memories",
-        "specialization": "Software Engineering",
-        "prerequisites": [
-            "CMP 201"
+            "JavaScript",
+            "CSS3",
+            "RESTful APIs",
+            "Agile Methodology",
+            "Scrum Framework",
+            "HTML5"
         ],
-        "technical_skills": [
-            "Memory Management",
-            "C++"
-        ],
-        "synopsis": "Building upon foundational OOP concepts, this advanced course dives into complex software architecture and memory management. Students will master C++, Multithreading, Exception Handling, and the development of Graphical User Interfaces (GUI). The course emphasizes writing robust, high-performance applications for desktop environments. Students must participate actively in group discussions and maintain a comprehensive laboratory workbook throughout the semester.",
-        "credits": 3
-    },
-    {
-        "course_id": "CMP 402",
-        "title": "Cloud Computing",
-        "specialization": "Core Computer Science",
-        "technical_skills": []
-    },
-    {
-        "course_id": "CMP 301",
-        "title": "Advanced Database Management",
-        "specialization": "Core Computer Science",
-        "prerequisites": [
-            "CMP 401",
-            "CMP 201"
-        ],
-        "technical_skills": [],
-        "synopsis": "An introduction to Agile, Scrum and Code Refactoring",
+        "synopsis": "This course introduces modern web development and software lifecycle management. Students will build responsive front-ends using HTML5, CSS3, and JavaScript, while integrating backend services via RESTful APIs. The project work will be strictly managed using the Scrum Framework to simulate real-world Agile Methodology.",
         "credits": 3
     }
 ]

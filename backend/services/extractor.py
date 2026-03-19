@@ -3,8 +3,25 @@ import re
 import json
 import os
 
+import pdfplumber
+import re
+import json
+import os
+
+# --- NEW: DYNAMIC PATH RESOLUTION ---
+# 1. Get the directory where this script (extractor.py) lives (.../backend/services)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 2. Go up one level to the backend root (.../backend)
+BASE_DIR = os.path.dirname(CURRENT_DIR)
+
+# 3. Point to the data directory (.../backend/data)
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
 # Path to curriculum handbook
-PDF_PATH = os.path.join("data", "Mock_CS_Handbook.pdf")
+PDF_PATH = os.path.join(DATA_DIR, "Mock_CS_Handbook.pdf")
+
+# ... rest of your code ...
 
 def extract_curriculum(pdf_path):
     extracted_courses = []
@@ -92,7 +109,7 @@ if __name__ == "__main__":
         courses = extract_curriculum(PDF_PATH)
         
         # NEW: Save to a JSON file for the AI to read
-        output_path = os.path.join("data", "raw_courses.json")
+        output_path = os.path.join(DATA_DIR, "raw_courses.json")
         with open(output_path, "w") as f:
             json.dump(courses, f, indent=4)
             

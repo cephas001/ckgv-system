@@ -254,7 +254,7 @@
         <div
           class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50"
         >
-          <h3 class="font-bold text-lg text-black">Edit Node Data</h3>
+          <h3 class="font-bold text-lg text-black">Edit Course Data</h3>
           <button
             @click="isEditing = false"
             class="text-slate-400 hover:text-slate-700"

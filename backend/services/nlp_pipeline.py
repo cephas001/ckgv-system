@@ -2,10 +2,20 @@ import spacy
 import json
 import os
 
+# --- DYNAMIC PATH RESOLUTION ---
+# 1. Get the directory where this script lives (.../backend/services)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 2. Go up one level to the backend root (.../backend)
+BASE_DIR = os.path.dirname(CURRENT_DIR)
+
+# 3. Point to the data directory (.../backend/data)
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
 # We read raw data, but now save to our active Database file
-RAW_DATA_PATH = os.path.join("data", "raw_courses.json")
-ACTIVE_DB_PATH = os.path.join("data", "courses.json") 
-ONTOLOGY_PATH = os.path.join("data", "ontology.json")
+RAW_DATA_PATH = os.path.join(DATA_DIR, "raw_courses.json")
+ACTIVE_DB_PATH = os.path.join(DATA_DIR, "courses.json") 
+ONTOLOGY_PATH = os.path.join(DATA_DIR, "ontology.json")
 
 def run_ontology_ner():
     print("Initializing spaCy NLP Engine with Centralized Ontology...")
@@ -23,7 +33,7 @@ def run_ontology_ner():
     patterns = []
     for specialization, skills in cs_ontology.items():
         for skill in skills:
-            patterns.append({"label": specialization, "pattern": [{"LOWER": word.lower()} for word in skill.split()]})
+            patterns.append({"label": specialization, "pattern": [{"LOWER": word.lower()} for word in skill.replace("-", " ").split()], "id": skill})
             
     ruler.add_patterns(patterns)
 
@@ -46,10 +56,10 @@ def run_ontology_ner():
             doc = nlp(synopsis)
             for ent in doc.ents:
                 if ent.label_ in cs_ontology:
-                    # Use Title Case for consistency
-                    clean_skill = ent.text.title()
-                    if clean_skill not in extracted_skills:
-                        extracted_skills.append(clean_skill)
+                    # NEW: Use ent.ent_id_ (the exact ontology string) instead of ent.text.title()
+                    exact_skill_name = ent.ent_id_ if ent.ent_id_ else ent.text
+                    if exact_skill_name not in extracted_skills:
+                        extracted_skills.append(exact_skill_name)
                     specialization_scores[ent.label_] += 1
                     
         assigned_specialization = "Core Computer Science"
