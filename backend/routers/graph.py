@@ -71,3 +71,27 @@ async def update_course(course_id: str, update_data: CourseUpdate):
         json.dump(courses, f, indent=4)
 
     return {"message": f"Successfully updated {course_id}"}
+
+@router.delete("/courses/{course_id}")
+async def delete_course(course_id: str):
+    """Deletes a course from the knowledge graph."""
+    if not os.path.exists(DATA_PATH):
+        raise HTTPException(status_code=404, detail="Curriculum data not found.")
+
+    with open(DATA_PATH, "r") as f:
+        courses = json.load(f)
+
+    # Count before filtering to see if the course actually exists
+    initial_length = len(courses)
+    
+    # Keep only the courses that DO NOT match the ID we want to delete
+    courses = [c for c in courses if c.get("course_id") != course_id]
+
+    if len(courses) == initial_length:
+        raise HTTPException(status_code=404, detail="Course not found in database.")
+
+    # Save the updated graph
+    with open(DATA_PATH, "w") as f:
+        json.dump(courses, f, indent=4)
+
+    return {"message": f"Successfully deleted {course_id}"}

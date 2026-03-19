@@ -109,21 +109,81 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right">
-                  <button
-                    type="button"
-                    class="inline-flex items-center justify-center rounded-xl bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 text-sm shadow-[0_4px_14px_0_rgba(227,62,56,0.25)] transition-all"
-                    @click="openDetails(course)"
-                  >
-                    View Details
-                  </button>
-                  <button
-                    v-if="isAdmin"
-                    type="button"
-                    class="inline-flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-4 py-2 text-sm shadow-sm transition-all ml-2"
-                    @click="openEdit(course)"
-                  >
-                    Edit
-                  </button>
+                  <div class="flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      class="p-2 rounded-lg text-black hover:text-blue-600 hover:bg-blue-50 transition-all"
+                      title="View Course Analytics"
+                      @click="openDetails(course)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    </button>
+
+                    <button
+                      v-if="isAdmin"
+                      type="button"
+                      class="p-2 rounded-lg text-black hover:text-emerald-600 hover:bg-emerald-50 transition-all"
+                      title="Edit Course Data"
+                      @click="openEdit(course)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                    </button>
+
+                    <button
+                      v-if="isAdmin"
+                      type="button"
+                      class="p-2 rounded-lg text-black hover:text-red-600 hover:bg-red-50 transition-all"
+                      title="Delete Course"
+                      @click="deleteCourse(course.course_id)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
               <tr v-if="filteredCourses.length === 0">
@@ -142,6 +202,7 @@
     <DetailsPanel
       :selectedData="selectedCourse"
       @close="selectedCourse = null"
+      :courses="courses"
     />
 
     <div
@@ -183,12 +244,13 @@
               v-model="editForm.specialization"
               class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:ring-1 focus:ring-indigo-500"
             >
-              <option>Core Computer Science</option>
-              <option>Software Engineering</option>
-              <option>Cybersecurity</option>
-              <option>Data & Algorithms</option>
-              <option>Systems & Architecture</option>
-              <option>Artificial Intelligence</option>
+              <option
+                v-for="track in availableSpecializations"
+                :key="track"
+                :value="track"
+              >
+                {{ track }}
+              </option>
             </select>
           </div>
           <div>
@@ -331,6 +393,36 @@ const saveEdit = async () => {
   }
 };
 
+// --- ADD THIS TO HANDLE DELETE CLICK ---
+const deleteCourse = async (courseId) => {
+  // 1. Prevent accidental clicks
+  if (
+    !confirm(
+      `Are you sure you want to permanently delete ${courseId}? This action cannot be undone.`,
+    )
+  ) {
+    return;
+  }
+
+  try {
+    // 2. Send the delete request to FastAPI
+    await $fetch(`http://127.0.0.1:8000/api/courses/${courseId}`, {
+      method: "DELETE",
+    });
+
+    // 3. Update the local UI state so it instantly disappears from the table
+    courses.value = courses.value.filter((c) => c.course_id !== courseId);
+
+    triggerNotification(`Successfully deleted ${courseId}`, "success");
+  } catch (error) {
+    console.error("Delete failed:", error);
+    triggerNotification(
+      "Failed to delete course. Ensure the backend is running.",
+      "error",
+    );
+  }
+};
+
 const {
   data: courses,
   pending,
@@ -356,18 +448,35 @@ const openDetails = (course) => {
   selectedCourse.value = { ...course, type: "course" };
 };
 
-const tagStyle = (specialization) => {
-  const colorMap = {
-    "Core Computer Science": "#3b82f6",
-    "Software Engineering": "#10b981",
-    Cybersecurity: "#ef4444",
-    "Data & Algorithms": "#8b5cf6",
-    "Systems & Architecture": "#06b6d4",
-    "Artificial Intelligence": "#d946ef",
-    default: "#64748b",
-  };
+// --- NEW: DYNAMICALLY EXTRACT SPECIALIZATIONS ---
+const availableSpecializations = computed(() => {
+  if (!normalizedCourses.value) return [];
+  const tracks = new Set(
+    normalizedCourses.value
+      .map((c) => c.specialization)
+      .filter((s) => s && s.trim() !== ""),
+  );
+  return Array.from(tracks).sort();
+});
 
-  const bg = colorMap[specialization] || colorMap.default;
+// --- NEW: DYNAMIC BADGE COLORS ---
+const colorPalette = [
+  "#3b82f6", // blue
+  "#10b981", // emerald
+  "#a855f7", // purple
+  "#06b6d4", // cyan
+  "#f43f5e", // rose
+  "#6366f1", // indigo
+];
+
+const tagStyle = (specialization) => {
+  const specs = availableSpecializations.value;
+  const index = specs.indexOf(specialization);
+
+  // Assign a consistent color from the palette based on its alphabetical index
+  const bg =
+    index !== -1 ? colorPalette[index % colorPalette.length] : "#64748b";
+
   return {
     backgroundColor: `${bg}1a`,
     color: bg,
