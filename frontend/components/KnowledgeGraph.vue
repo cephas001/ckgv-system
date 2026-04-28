@@ -1,14 +1,14 @@
 <template>
-  <div
-    class="w-full h-full relative overflow-hidden flex flex-col bg-[#160d27]"
-  >
+  <div class="w-full h-full relative overflow-hidden flex flex-col bg-white">
     <div
       class="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 z-30 w-[90%] md:w-[450px] flex gap-3"
     >
       <div class="relative flex-1">
+        <!-- Specializations Button -->
+
         <button
           @click="isDropdownOpen = !isDropdownOpen"
-          class="w-full flex justify-between items-center bg-slate-800/90 border border-slate-600 px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 shadow-xl backdrop-blur-md hover:bg-slate-700 transition-all"
+          class="w-full flex justify-between items-center bg-black border border-black/60 text-white hover:bg-black/90 transition-all px-5 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md"
         >
           <span class="truncate">{{
             selectedTrack || "All Specializations"
@@ -71,14 +71,11 @@
         </transition>
       </div>
 
+      <!-- Show Skills Button -->
       <button
         @click="showSkills = !showSkills"
-        class="flex items-center gap-2 bg-slate-800/90 border px-4 py-2.5 rounded-xl text-sm font-semibold shadow-xl backdrop-blur-md transition-all shrink-0"
-        :class="
-          showSkills
-            ? 'border-amber-500/50 text-amber-400'
-            : 'border-slate-600 text-slate-400 hover:text-slate-200 hover:bg-slate-700'
-        "
+        class="flex items-center gap-2 bg-black border hover:bg-black/90 px-4 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md transition-all shrink-0"
+        :class="showSkills ? ' text-white' : '  text-white'"
       >
         <svg
           v-if="showSkills"
@@ -112,9 +109,11 @@
           showSkills ? "Hide Skills" : "Show Skills"
         }}</span>
       </button>
+
+      <!-- Export Button -->
       <button
         @click="exportGraph"
-        class="flex items-center gap-2 bg-slate-800/90 border border-slate-600 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-200 shadow-xl backdrop-blur-md hover:bg-slate-700 hover:text-white transition-all shrink-0"
+        class="flex items-center gap-2 bg-black border border-black/60 text-white hover:bg-black/90 px-4 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md transition-all shrink-0"
         title="Save a snapshot of this roadmap"
       >
         <svg
@@ -163,15 +162,15 @@
       >
         <div
           v-show="showLegend"
-          class="bg-slate-800/95 border border-slate-700 p-5 rounded-xl shadow-2xl backdrop-blur-md w-64"
+          class="bg-white border border-slate-700 p-5 rounded-xl shadow-2xl backdrop-blur-md w-64"
         >
           <h3
-            class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest border-b border-slate-700 pb-2 flex justify-between items-center"
+            class="text-xs font-bold text-black mb-4 uppercase tracking-widest border-b border-slate-700 pb-2 flex justify-between items-center"
           >
             Track Legend
             <button
               @click="showLegend = false"
-              class="text-slate-500 hover:text-slate-300"
+              class="text-black hover:text-slate-300"
             >
               ✕
             </button>
@@ -186,9 +185,7 @@
                 class="w-3.5 h-3.5 rounded-full"
                 :class="trackColors[track]"
               ></div>
-              <span class="text-sm text-slate-200 font-medium">{{
-                track
-              }}</span>
+              <span class="text-sm text-black font-medium">{{ track }}</span>
             </div>
 
             <div class="h-px w-full bg-slate-700 my-1"></div>
@@ -197,7 +194,7 @@
               <div
                 class="w-3.5 h-3.5 rounded-full bg-amber-500 shadow-[0_0_8px_theme(colors.amber.500)]"
               ></div>
-              <span class="text-sm text-slate-200 font-medium"
+              <span class="text-sm text-black font-medium"
                 >Technical Skill</span
               >
             </div>
@@ -205,17 +202,17 @@
         </div>
       </transition>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
         <button
           @click="showLegend = !showLegend"
-          class="flex items-center gap-2 bg-slate-800 border border-slate-600 px-4 py-2 rounded-full shadow-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
+          class="flex items-center gap-2 bg-black border border-black/60 text-white hover:bg-black/90 transition-all px-4 py-2 rounded-full shadow-lg"
         >
           <IconsMap />
         </button>
 
         <button
           @click="showHelpModal = true"
-          class="flex items-center justify-center w-10 h-10 bg-slate-800 border border-slate-600 rounded-full shadow-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
+          class="flex items-center justify-center w-10 h-10 bg-black border border-black/60 text-white hover:bg-black/90 transition-allborder rounded-full shadow-lg transition-all"
           title="How to read this graph"
         >
           <svg

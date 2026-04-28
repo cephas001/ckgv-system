@@ -17,20 +17,7 @@
         <div
           class="w-14 h-14 bg-red-50 text-[#e33e38] rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#e33e38] group-hover:text-white transition-colors duration-300"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-7 w-7"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
+          <IconsPlus />
         </div>
         <h3 class="text-lg font-bold text-black mb-2">Add Single Course</h3>
         <p class="text-sm text-black/80 leading-relaxed">
@@ -109,20 +96,7 @@
           @click="showAddModal = false"
           class="absolute top-6 right-6 text-slate-400 hover:text-slate-800 hover:bg-slate-100 p-2 rounded-full transition-all z-10"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <IconsBigCancel />
         </button>
         <div class="max-h-[85vh] overflow-y-auto">
           <AdminAddCourseForm @course-added="handleCourseAdded" />
@@ -141,38 +115,12 @@
           @click="showBulkModal = false"
           class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 p-2"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <IconsUpload />
         </button>
         <div
           class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-            />
-          </svg>
+          <IconsFolder />
         </div>
         <h3 class="text-xl font-bold mb-2 text-black">Bulk Importer</h3>
         <p class="text-black/70 text-sm mb-6">

@@ -3,5 +3,3 @@
     <CourseTable />
   </div>
 </template>
-
-<script setup></script>

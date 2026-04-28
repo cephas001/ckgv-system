@@ -7,7 +7,7 @@
 
     <button
       @click="recenterGraph"
-      class="absolute bottom-6 right-6 z-20 flex items-center justify-center w-12 h-12 bg-slate-800 border border-slate-600 rounded-full shadow-2xl text-slate-300 hover:text-white hover:bg-slate-700 hover:scale-105 transition-all"
+      class="absolute bottom-6 right-6 z-20 flex items-center justify-center w-12 h-12 bg-black border border-black/60 text-white hover:bg-black/90 rounded-full shadow-2xl hover:scale-105 transition-all"
       title="Recenter Graph"
     >
       <svg
@@ -44,7 +44,6 @@ const emit = defineEmits(["nodeClicked"]);
 const svgRef = ref(null);
 const containerRef = ref(null);
 
-// Store references for the Recenter function
 let d3Group = null;
 let d3Zoom = null;
 let d3Svg = null;
@@ -55,15 +54,14 @@ const renderGraph = () => {
   const nodesMap = new Map();
   const links = [];
 
-  // --- OPTIMIZATION: DYNAMIC COLOR MAPPING ---
-  // Using exact hex codes matching the Tailwind classes in the parent component
+  // --- RESTORED: DYNAMIC NODE COLORS ---
   const palette = [
-    "#3b82f6",
-    "#10b981",
-    "#a855f7",
-    "#06b6d4",
-    "#f43f5e",
-    "#6366f1",
+    "#3b82f6", // Blue
+    "#10b981", // Emerald
+    "#a855f7", // Purple
+    "#06b6d4", // Cyan
+    "#f43f5e", // Rose
+    "#6366f1", // Indigo
   ];
   const colorMap = {};
 
@@ -130,9 +128,8 @@ const renderGraph = () => {
   svg.selectAll("*").remove();
 
   d3Group = svg.append("g");
-  d3Svg = svg; // Store for recenter
+  d3Svg = svg;
 
-  // Store zoom behavior instance for recenter
   d3Zoom = d3
     .zoom()
     .extent([
@@ -144,21 +141,16 @@ const renderGraph = () => {
 
   svg.call(d3Zoom);
 
-  // --- OPTIMIZATION: DYNAMIC PHYSICS CLUSTERS ---
   const radius = Math.min(width, height) * 0.48;
   const clusterCenters = {};
-
-  // Clone array so we don't mutate the original
   const tracksForClustering = [...uniqueTracks];
 
-  // Force Core CS to the center if it exists
   const coreIndex = tracksForClustering.indexOf("Core Computer Science");
   if (coreIndex !== -1) {
     const coreTrack = tracksForClustering.splice(coreIndex, 1)[0];
     clusterCenters[coreTrack] = { x: width / 2, y: height / 2 };
   }
 
-  // Distribute the remaining tracks evenly in a perfect circle
   const angleStep = (2 * Math.PI) / (tracksForClustering.length || 1);
   tracksForClustering.forEach((track, index) => {
     clusterCenters[track] = {
@@ -208,20 +200,21 @@ const renderGraph = () => {
     .selectAll("line")
     .data(links)
     .join("line")
-    .attr("stroke", (d) => (d.type === "prerequisite" ? "#3b82f6" : "#475569"))
-    .attr("stroke-opacity", (d) => (d.type === "prerequisite" ? 0.7 : 0.4))
+    .attr("stroke", (d) => (d.type === "prerequisite" ? "#3b82f6" : "#cbd5e1"))
+    .attr("stroke-opacity", (d) => (d.type === "prerequisite" ? 0.8 : 0.8))
     .attr("stroke-width", 1.5)
     .attr("stroke-dasharray", (d) => (d.type === "prerequisite" ? "5,5" : "0"));
 
   const node = d3Group
     .append("g")
     .attr("class", "nodes-layer")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
+    .attr("stroke", "#ffffff") // Keeps nodes clean against the white background
+    .attr("stroke-width", 2.5)
     .selectAll("circle")
     .data(nodes)
     .join("circle")
     .attr("r", (d) => (d.group === "course" ? 14 : 7))
+    // Vibrant colors for nodes
     .attr("fill", (d) =>
       d.group === "skill" ? "#f59e0b" : colorMap[d.specialization] || "#94a3b8",
     )
@@ -236,11 +229,12 @@ const renderGraph = () => {
     .join("text")
     .text((d) => d.id)
     .attr("font-size", (d) => (d.group === "course" ? "12px" : "10px"))
-    .attr("fill", "#e2e8f0")
+    // Strictly black text for courses, lighter black/slate for skills
+    .attr("fill", (d) => (d.group === "course" ? "#000000" : "141414"))
     .attr("dx", 18)
     .attr("dy", 4)
     .style("pointer-events", "none")
-    .style("font-weight", (d) => (d.group === "course" ? "600" : "400"));
+    .style("font-weight", (d) => (d.group === "course" ? "700" : "500"));
 
   node.on("click", (event, d) => emit("nodeClicked", d));
 
@@ -257,14 +251,12 @@ const renderGraph = () => {
   applyFilter(props.selectedTrack);
 };
 
-// --- NEW FEATURE 2: Recenter Logic ---
 const recenterGraph = () => {
   if (!d3Svg || !d3Zoom || !containerRef.value) return;
 
   const width = containerRef.value.clientWidth;
   const height = containerRef.value.clientHeight;
 
-  // Transition smoothly back to default scale (1) and translation (0,0)
   d3Svg
     .transition()
     .duration(750)
@@ -277,17 +269,17 @@ const applyFilter = (track) => {
     .selectAll("circle")
     .transition()
     .duration(400)
-    .attr("opacity", (d) => (!track || d.tracks.has(track) ? 1 : 0.1));
+    .attr("opacity", (d) => (!track || d.tracks.has(track) ? 1 : 0.15));
   d3Group
     .selectAll("text")
     .transition()
     .duration(400)
-    .attr("opacity", (d) => (!track || d.tracks.has(track) ? 1 : 0.1));
+    .attr("opacity", (d) => (!track || d.tracks.has(track) ? 1 : 0.15));
   d3Group
     .selectAll("line")
     .transition()
     .duration(400)
-    .attr("opacity", (d) => (!track || d.tracks.has(track) ? 0.5 : 0.02));
+    .attr("opacity", (d) => (!track || d.tracks.has(track) ? 0.6 : 0.05));
 };
 
 const drag = (simulation) => {

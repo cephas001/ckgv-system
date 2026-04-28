@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm z-20 fixed inset-y-0 left-0 shrink-0"
+    class="w-64 bg-white border-r border-slate-300 flex flex-col shadow-sm z-20 fixed inset-y-0 left-0 shrink-0"
   >
     <NuxtLink
       to="/"
