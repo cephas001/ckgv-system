@@ -14,8 +14,7 @@ from models.domain import AdminUser, AuditLog
 router = APIRouter(prefix="/api/auth", tags=["Admin Authentication"])
 
 # --- JWT CONFIGURATION ---
-# Note: Ideally, move SECRET_KEY to your .env file!
-SECRET_KEY = os.getenv("SECRET_KEY", "mcpherson_ckgv_secret_key_2026")
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 120
 

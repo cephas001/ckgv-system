@@ -54,7 +54,7 @@ const renderGraph = () => {
   const nodesMap = new Map();
   const links = [];
 
-  // --- RESTORED: DYNAMIC NODE COLORS ---
+  // --- DYNAMIC NODE COLORS ---
   const palette = [
     "#3b82f6", // Blue
     "#10b981", // Emerald
@@ -208,13 +208,12 @@ const renderGraph = () => {
   const node = d3Group
     .append("g")
     .attr("class", "nodes-layer")
-    .attr("stroke", "#ffffff") // Keeps nodes clean against the white background
+    .attr("stroke", "#ffffff")
     .attr("stroke-width", 2.5)
     .selectAll("circle")
     .data(nodes)
     .join("circle")
     .attr("r", (d) => (d.group === "course" ? 14 : 7))
-    // Vibrant colors for nodes
     .attr("fill", (d) =>
       d.group === "skill" ? "#f59e0b" : colorMap[d.specialization] || "#94a3b8",
     )
@@ -229,7 +228,6 @@ const renderGraph = () => {
     .join("text")
     .text((d) => d.id)
     .attr("font-size", (d) => (d.group === "course" ? "12px" : "10px"))
-    // Strictly black text for courses, lighter black/slate for skills
     .attr("fill", (d) => (d.group === "course" ? "#000000" : "141414"))
     .attr("dx", 18)
     .attr("dy", 4)

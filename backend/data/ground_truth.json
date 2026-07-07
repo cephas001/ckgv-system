@@ -1,0 +1,25 @@
+{
+  "CMP 401": [
+    "Scrum Framework",
+    "Version Control",
+    "Git",
+    "Continuous Integration",
+    "Software Testing"
+  ],
+  "CMP 409": [
+    "Public Key Infrastructure",
+    "PKI",
+    "Advanced Encryption Standard",
+    "AES",
+    "Hash Functions",
+    "Penetration Testing"
+  ],
+  "CMP 301": ["Linked Lists", "Binary Search Trees", "Dynamic Programming"],
+  "CMP 309": [
+    "Machine Learning",
+    "Neural Networks",
+    "Natural Language Processing",
+    "Heuristic Search",
+    "Predictive Models"
+  ]
+}

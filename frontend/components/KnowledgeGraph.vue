@@ -40,14 +40,14 @@
         >
           <div
             v-show="isDropdownOpen"
-            class="absolute top-full left-0 mt-2 w-full bg-slate-800 border border-slate-600 rounded-xl shadow-2xl overflow-hidden py-1 z-40 max-h-96 overflow-y-auto"
+            class="absolute top-full left-0 mt-2 w-full bg-black border border-slate-600 rounded-xl shadow-2xl overflow-hidden py-1 z-40 max-h-96 overflow-y-auto"
           >
             <button
               @click="handleTrackSelect(null)"
               class="w-full text-left px-5 py-2.5 text-sm transition-colors"
               :class="
                 !selectedTrack
-                  ? 'bg-blue-500/20 text-blue-400 font-bold'
+                  ? 'bg-white text-black '
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               "
             >
@@ -61,7 +61,7 @@
               class="w-full text-left px-5 py-2.5 text-sm transition-colors"
               :class="
                 selectedTrack === track
-                  ? 'bg-blue-500/20 text-blue-400 font-bold'
+                  ? 'bg-white text-black '
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               "
             >

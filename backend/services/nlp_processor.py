@@ -14,13 +14,10 @@ class CurriculumParser:
         self.ruler = self.nlp.add_pipe("entity_ruler", before="ner")
         
         # --- DYNAMIC PATH RESOLUTION ---
-        # 1. Get the directory where this script lives (.../backend/services)
         CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-        # 2. Go up one level to the backend root (.../backend)
         BASE_DIR = os.path.dirname(CURRENT_DIR)
 
-        # 3. Point to the data directory (.../backend/data)
         DATA_DIR = os.path.join(BASE_DIR, "data")
         ontology_path = os.path.join(DATA_DIR, "ontology.json")
         
@@ -36,7 +33,6 @@ class CurriculumParser:
         patterns = []
         for specialization, skills in self.cs_ontology.items():
             for skill in skills:
-                # We label the entity with its specialization (e.g., "Software Engineering")
                 patterns.append({
                     "label": specialization, 
                     "pattern": [{"LOWER": word.lower()} for word in skill.replace("-", " ").split()],
@@ -53,7 +49,6 @@ class CurriculumParser:
         # Extract based on the Entity Ruler
         for ent in doc.ents:
             if ent.label_ in self.cs_ontology:
-                # NEW: Use ent.ent_id_ (the exact ontology string) instead of ent.text.title()
                 exact_skill_name = ent.ent_id_ if ent.ent_id_ else ent.text
                 found_skills.add(exact_skill_name)
                 specialization_scores[ent.label_] += 1
