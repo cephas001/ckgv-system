@@ -377,6 +377,8 @@ const sortBy = ref("code_asc");
 
 const { triggerNotification } = useNotification();
 
+const config = useRuntimeConfig();
+
 // --- ADD THIS TO CHECK IF ADMIN IS LOGGED IN ---
 const isAdmin = computed(() => {
   return !!useCookie("auth_token").value;
@@ -415,11 +417,9 @@ const saveEdit = async () => {
       .map((pre) => pre.trim().toUpperCase()) // Force course codes to be uppercase
       .filter((pre) => pre.length > 0);
 
-    console.log(updatedPrereqs);
-
     // 2. Send the real update request to FastAPI
     await $fetch(
-      `http://127.0.0.1:8000/api/courses/${editForm.value.course_id}`,
+      `${config.public.apiBase}/courses/${editForm.value.course_id}`,
       {
         method: "PUT",
         body: {
@@ -473,7 +473,7 @@ const deleteCourse = async (courseId) => {
 
   try {
     // 2. Send the delete request to FastAPI
-    await $fetch(`http://127.0.0.1:8000/api/courses/${courseId}`, {
+    await $fetch(`${config.public.apiBase}/courses/${courseId}`, {
       method: "DELETE",
     });
 
@@ -494,7 +494,7 @@ const {
   data: courses,
   pending,
   error,
-} = await useFetch("http://127.0.0.1:8000/api/graph");
+} = await useFetch(`${config.public.apiBase}/api/graph`);
 
 const normalizedCourses = computed(() => {
   return Array.isArray(courses.value) ? courses.value : [];

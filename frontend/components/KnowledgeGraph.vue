@@ -8,7 +8,7 @@
 
         <button
           @click="isDropdownOpen = !isDropdownOpen"
-          class="w-full flex justify-between items-center bg-black border border-black/60 text-white hover:bg-black/90 transition-all px-5 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md"
+          class="w-full flex justify-between items-center bg-white border border-black text-black transition-all px-5 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md"
         >
           <span class="truncate">{{
             selectedTrack || "All Specializations"
@@ -40,7 +40,7 @@
         >
           <div
             v-show="isDropdownOpen"
-            class="absolute top-full left-0 mt-2 w-full bg-black border border-slate-600 rounded-xl shadow-2xl overflow-hidden py-1 z-40 max-h-96 overflow-y-auto"
+            class="absolute top-full left-0 mt-2 w-full bg-white text-black border border-slate-600 rounded-xl shadow-2xl overflow-hidden py-1 z-40 max-h-96 overflow-y-auto"
           >
             <button
               @click="handleTrackSelect(null)"
@@ -62,7 +62,7 @@
               :class="
                 selectedTrack === track
                   ? 'bg-white text-black '
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  : 'text-black hover:bg-slate-700/50 '
               "
             >
               {{ track }}
@@ -74,8 +74,7 @@
       <!-- Show Skills Button -->
       <button
         @click="showSkills = !showSkills"
-        class="flex items-center gap-2 bg-black border hover:bg-black/90 px-4 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md transition-all shrink-0"
-        :class="showSkills ? ' text-white' : '  text-white'"
+        class="flex items-center gap-2 bg-white border hover:bg-black/90 px-4 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md transition-all shrink-0 text-black border-black"
       >
         <svg
           v-if="showSkills"
@@ -113,7 +112,7 @@
       <!-- Export Button -->
       <button
         @click="exportGraph"
-        class="flex items-center gap-2 bg-black border border-black/60 text-white hover:bg-black/90 px-4 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md transition-all shrink-0"
+        class="flex items-center gap-2 bg-white border border-black text-black hover:bg-black/90 px-4 py-2.5 rounded-xl text-md shadow-xl backdrop-blur-md transition-all shrink-0"
         title="Save a snapshot of this roadmap"
       >
         <svg
@@ -366,12 +365,13 @@ const isDropdownOpen = ref(false);
 const showLegend = ref(false);
 const showSkills = ref(false);
 const showHelpModal = ref(false);
+const config = useRuntimeConfig();
 
 const {
   data: courses,
   pending,
   error,
-} = await useFetch("http://127.0.0.1:8000/api/graph");
+} = await useFetch(`${config.public.apiBase}/graph`);
 
 // --- 1. DYNAMICALLY EXTRACT SPECIALIZATIONS ---
 const availableTracks = computed(() => {

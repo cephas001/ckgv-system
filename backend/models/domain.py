@@ -1,14 +1,15 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
+from sqlalchemy import Column, Integer, String
 from core.database import Base
 
 class AdminUser(Base):
     __tablename__ = "admin_users"
-
-    AdminID = Column(Integer, primary_key=True, index=True)
-    Username = Column(String, unique=True, index=True, nullable=False)
-    PasswordHash = Column(String, nullable=False)
-    Role = Column(String, default="Admin") # E.g., SuperAdmin, Lecturer
+    
+    # Notice the first argument is explicitly the lowercase string for Postgres
+    AdminID = Column("adminid", Integer, primary_key=True, index=True)
+    Username = Column("username", String, unique=True, index=True)
+    PasswordHash = Column("passwordhash", String)
+    Role = Column("role", String)
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"

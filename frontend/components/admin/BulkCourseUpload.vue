@@ -305,6 +305,8 @@ const isSaving = ref(false);
 const importMode = ref("update");
 const pendingData = ref([]);
 
+const config = useRuntimeConfig();
+
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -329,7 +331,7 @@ const processWithAI = async () => {
   formData.append("file", selectedFile.value);
 
   try {
-    const response = await $fetch("http://127.0.0.1:8000/api/upload/preview", {
+    const response = await $fetch(`${config.public.apiBase}/upload/preview`, {
       method: "POST",
       body: formData,
     });
@@ -367,7 +369,7 @@ const commitToGraph = async () => {
       };
     });
 
-    await $fetch("http://127.0.0.1:8000/api/upload/commit", {
+    await $fetch(`${config.public.apiBase}/upload/commit`, {
       method: "POST",
       body: {
         courses: validatedPayload,

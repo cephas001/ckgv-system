@@ -1,17 +1,24 @@
+import sys
+import os
 import asyncio
-from core.database import engine, Base, AsyncSessionLocal
-from backend.models.domain import AdminUser
+from dotenv import load_dotenv
 from passlib.context import CryptContext
 from sqlalchemy.future import select
-from dotenv import load_dotenv
-import os
+
+# --- PATH RESOLUTION ---
+# This forces Python to look in the parent 'backend' directory for your modules
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.append(BASE_DIR)
+
+# Now Python can find 'core' and 'models' perfectly
+from core.database import engine, Base, AsyncSessionLocal
+from models.domain import AdminUser
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 load_dotenv()
 
 admin_password = os.getenv("ADMIN_PASSWORD")
-
 if not admin_password:
     raise ValueError("CRITICAL: ADMIN_PASSWORD environment variable is not set.")
 
@@ -19,7 +26,7 @@ async def init_models():
     # 1. Create the tables in PostgreSQL (Safely ignores if they exist)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     # 2. Insert a default admin user
     async with AsyncSessionLocal() as session:
         # Check if 'admin' already exists

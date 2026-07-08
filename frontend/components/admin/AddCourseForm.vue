@@ -237,10 +237,12 @@ const form = ref({
   synopsis: "",
 });
 
+const config = useRuntimeConfig();
+
 const runNLPAnalysis = async () => {
   isAnalyzing.value = true;
   try {
-    const data = await $fetch("http://127.0.0.1:8000/api/nlp/analyze", {
+    const data = await $fetch(`${config.public.apiBase}/nlp/analyze`, {
       method: "POST",
       body: { description: rawDescription.value },
     });
@@ -275,7 +277,7 @@ const submitForm = async () => {
   form.value.synopsis = rawDescription.value.trim();
 
   try {
-    await $fetch("http://127.0.0.1:8000/api/courses", {
+    await $fetch(`${config.public.apiBase}/courses`, {
       method: "POST",
       body: form.value,
     });

@@ -1,11 +1,10 @@
 import spacy
-from spacy.pipeline import EntityRuler
 import json
 import os
 
 class CurriculumParser:
     def __init__(self):
-        # Load the core model
+        print("Initializing spaCy NLP Engine with Centralized Ontology...")
         self.nlp = spacy.load("en_core_web_md")
         
         if self.nlp.has_pipe("entity_ruler"):
@@ -14,12 +13,9 @@ class CurriculumParser:
         self.ruler = self.nlp.add_pipe("entity_ruler", before="ner")
         
         # --- DYNAMIC PATH RESOLUTION ---
-        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-        BASE_DIR = os.path.dirname(CURRENT_DIR)
-
-        DATA_DIR = os.path.join(BASE_DIR, "data")
-        ontology_path = os.path.join(DATA_DIR, "ontology.json")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.dirname(current_dir)
+        ontology_path = os.path.join(base_dir, "data", "ontology.json")
         
         # --- LOAD THE CENTRALIZED ONTOLOGY ---
         try:
@@ -42,6 +38,13 @@ class CurriculumParser:
         self.ruler.add_patterns(patterns)
 
     def extract_metadata(self, course_text: str):
+        # Handle empty synopses gracefully
+        if not course_text or not isinstance(course_text, str):
+            return {
+                "extracted_skills": [],
+                "suggested_specialization": "Core Computer Science"
+            }
+
         doc = self.nlp(course_text)
         found_skills = set()
         specialization_scores = {spec: 0 for spec in self.cs_ontology.keys()}

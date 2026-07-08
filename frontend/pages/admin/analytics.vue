@@ -235,8 +235,10 @@ definePageMeta({
   middleware: "auth",
 });
 
+const config = useRuntimeConfig();
+
 // Fetch all graph data
-const { data: courses } = await useFetch("http://127.0.0.1:8000/api/graph");
+const { data: courses } = await useFetch(`${config.public.apiBase}/graph`);
 
 // 1. Calculate Total Unique Skills
 const totalSkills = computed(() => {

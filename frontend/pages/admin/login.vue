@@ -96,12 +96,14 @@ const router = useRouter();
 const token = useCookie("auth_token");
 token.value = null;
 
+const config = useRuntimeConfig();
+
 const handleLogin = async () => {
   isLoading.value = true;
   errorMessage.value = "";
 
   try {
-    const response = await $fetch("http://127.0.0.1:8000/api/auth/login", {
+    const response = await $fetch(`${config.public.apiBase}/auth/login`, {
       method: "POST",
       body: {
         username: username.value,
